@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-trae-theme="light" class=""><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>情绪释放工作台 - 圣多纳释放法</title>
+<style>
+:root {
+  --bg: #f5f0eb;
+  --bg-card: #ffffff;
+  --bg-dark: #2c2c2e;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-light: #aeaeb2;
+  --accent: #8b6f4e;
+  --accent-light: #c4a882;
+  --accent-bg: rgba(139,111,78,0.08);
+  --border: #e5e0db;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --nav-height: 64px;
+  --header-height: 56px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size:16px; scroll-behavior:smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--accent-light); border-radius:4px; }
+
+.app-header {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  height: var(--header-height);
+  background: rgba(245,240,235,0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items:center; justify-content:center;
+  padding: 0 16px;
+}
+.app-header h1 { font-size: 17px; font-weight:600; color:var(--text); letter-spacing: 0.5px; }
+.app-header .subtitle { font-size: 11px; color:var(--text-secondary); margin-top:1px; font-weight:400; }
+
+.main-content {
+  padding-top: var(--header-height);
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
+  min-height: 100vh;
+}
+
+.page { display:none; padding: 16px; animation: fadeIn 0.3s ease; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.search-container {
+  position: sticky; top: var(--header-height); z-index:10;
+  padding: 12px 0; background: var(--bg);
+}
+.search-box {
+  position: relative; background: var(--bg-card);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  border: 1px solid var(--border); transition: var(--transition);
+}
+.search-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(139,111,78,0.12);
+}
+.search-box input {
+  width:100%; padding: 14px 16px 14px 44px;
+  border:none; background:transparent;
+  font-size:16px; font-family:var(--font);
+  color:var(--text); outline:none;
+}
+.search-box input::placeholder { color:var(--text-light); }
+.search-icon {
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  color:var(--text-light); font-size:18px; pointer-events:none;
+}
+.search-clear {
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  width:24px; height:24px; border-radius:50%;
+  background:var(--border); border:none; cursor:pointer;
+  display:none; align-items:center; justify-content:center;
+  font-size:14px; color:var(--text-secondary);
+}
+.search-clear.show { display:flex; }
+
+.quick-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; padding-bottom:4px; }
+.quick-tag {
+  padding: 6px 14px; border-radius:20px;
+  background:var(--accent-bg); color:var(--accent);
+  font-size:13px; border:none; cursor:pointer;
+  transition:var(--transition); font-family:var(--font);
+}
+.quick-tag:hover, .quick-tag:active { background:var(--accent); color:#fff; }
+
+.search-results { margin-top:16px; }
+.result-group { margin-bottom:20px; }
+.result-group-title {
+  font-size:13px; font-weight:600; color:var(--text-secondary);
+  text-transform:uppercase; letter-spacing:1px;
+  margin-bottom:10px; padding-left:4px;
+}
+.result-card {
+  background:var(--bg-card); border-radius:var(--radius-sm);
+  padding:14px 16px; margin-bottom:8px;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+  cursor:pointer; transition:var(--transition);
+  display:flex; align-items:center; gap:12px;
+}
+.result-card:hover, .result-card:active {
+  transform:translateY(-1px);
+  box-shadow:var(--shadow-lg);
+  border-color:var(--accent-light);
+}
+.result-card .emotion-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.result-card .emotion-name { font-size:15px; font-weight:500; flex:1; }
+.result-card .emotion-category {
+  font-size:12px; color:var(--text-secondary);
+  background:var(--accent-bg); padding:3px 8px;
+  border-radius:10px; white-space:nowrap;
+}
+
+.hierarchy-root { text-align:center; padding:20px 0 16px; }
+.hierarchy-root .root-label { font-size:22px; font-weight:700; color:var(--accent); letter-spacing:2px; }
+.hierarchy-root .root-sub { font-size:13px; color:var(--text-secondary); margin-top:4px; }
+
+.desire-section { margin-bottom:24px; }
+.desire-header {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 16px; margin-bottom:12px;
+  background:var(--bg-card); border-radius:var(--radius-sm);
+  box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.desire-icon { font-size:20px; }
+.desire-title { font-size:15px; font-weight:600; flex:1; }
+.desire-subtitle { font-size:11px; color:var(--text-secondary); }
+
+.category-card {
+  background:var(--bg-card); border-radius:var(--radius);
+  margin-bottom:12px; box-shadow:var(--shadow);
+  border:1px solid var(--border); overflow:hidden;
+  transition:var(--transition);
+}
+.category-header {
+  padding:14px 16px; cursor:pointer;
+  display:flex; align-items:center; gap:12px;
+  user-select:none;
+}
+.category-header:active { background:var(--accent-bg); }
+.category-color { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+.category-name { font-size:16px; font-weight:600; flex:1; }
+.category-count {
+  font-size:12px; color:var(--text-light);
+  background:var(--bg); padding:2px 8px; border-radius:10px;
+}
+.category-arrow { font-size:12px; color:var(--text-light); transition:var(--transition); }
+.category-card.expanded .category-arrow { transform:rotate(180deg); }
+
+.category-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+.category-card.expanded .category-body { max-height:2000px; }
+.emotion-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap:6px; padding:0 16px 16px;
+}
+.emotion-chip {
+  padding:8px 10px; border-radius:var(--radius-xs);
+  background:var(--bg); font-size:13px;
+  text-align:center; cursor:pointer;
+  transition:var(--transition); border:1px solid transparent;
+  color:var(--text);
+}
+.emotion-chip:hover, .emotion-chip:active {
+  background:var(--accent-bg); border-color:var(--accent-light);
+  color:var(--accent);
+}
+
+.release-intro { text-align:center; padding:20px 0; }
+.release-intro .big-icon { font-size:48px; margin-bottom:12px; }
+.release-intro h2 { font-size:20px; font-weight:700; margin-bottom:8px; }
+.release-intro p { font-size:14px; color:var(--text-secondary); line-height:1.6; }
+
+.release-steps { margin-top:20px; }
+.release-step {
+  background:var(--bg-card); border-radius:var(--radius);
+  padding:20px; margin-bottom:12px;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+  display:none;
+}
+.release-step.active { display:block; animation:fadeIn 0.4s ease; }
+.step-number {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px; border-radius:50%;
+  background:var(--accent); color:#fff;
+  font-size:14px; font-weight:600; margin-bottom:12px;
+}
+.step-question { font-size:18px; font-weight:600; margin-bottom:8px; line-height:1.4; }
+.step-hint { font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:16px; }
+.step-options { display:flex; flex-direction:column; gap:8px; }
+.step-option {
+  padding:14px 16px; border-radius:var(--radius-sm);
+  background:var(--bg); border:2px solid transparent;
+  font-size:15px; cursor:pointer; transition:var(--transition);
+  text-align:center; font-family:var(--font); color:var(--text);
+}
+.step-option:hover, .step-option:active { border-color:var(--accent); background:var(--accent-bg); }
+.step-option.selected { border-color:var(--accent); background:var(--accent); color:#fff; }
+
+.release-progress { display:flex; justify-content:center; gap:6px; margin-bottom:20px; }
+.progress-dot { width:8px; height:8px; border-radius:50%; background:var(--border); transition:var(--transition); }
+.progress-dot.active { background:var(--accent); width:24px; border-radius:4px; }
+.progress-dot.done { background:var(--accent-light); }
+
+.release-nav { display:flex; gap:12px; margin-top:20px; }
+.release-btn {
+  flex:1; padding:14px; border-radius:var(--radius-sm);
+  border:none; font-size:15px; font-weight:600;
+  cursor:pointer; transition:var(--transition); font-family:var(--font);
+}
+.release-btn.primary { background:var(--accent); color:#fff; }
+.release-btn.primary:hover { background:#7a6040; }
+.release-btn.secondary { background:var(--bg); color:var(--text-secondary); }
+.release-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+.current-emotion-display {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border-radius:var(--radius); padding:20px;
+  color:#fff; text-align:center; margin-bottom:20px;
+  display:none;
+}
+.current-emotion-display.show { display:block; }
+.current-emotion-display .ce-name { font-size:24px; font-weight:700; }
+.current-emotion-display .ce-category { font-size:13px; opacity:0.85; margin-top:4px; }
+.current-emotion-display .ce-desire { font-size:12px; opacity:0.7; margin-top:2px; }
+
+.journal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.journal-header h2 { font-size:20px; font-weight:700; }
+.journal-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+.stat-card {
+  background:var(--bg-card); border-radius:var(--radius-sm);
+  padding:14px; text-align:center;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.stat-number { font-size:24px; font-weight:700; color:var(--accent); }
+.stat-label { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+
+.journal-list { display:flex; flex-direction:column; gap:10px; }
+.journal-entry {
+  background:var(--bg-card); border-radius:var(--radius-sm);
+  padding:14px 16px; box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.je-date { font-size:11px; color:var(--text-light); margin-bottom:6px; }
+.je-emotion { font-size:15px; font-weight:600; margin-bottom:4px; }
+.je-category { font-size:12px; color:var(--accent); margin-bottom:4px; }
+.je-delete {
+  float:right; background:none; border:none;
+  color:var(--text-light); cursor:pointer; font-size:16px; padding:4px;
+}
+.je-delete:hover { color:#e74c3c; }
+.je-source {
+  display:inline-block; font-size:11px; font-weight:600;
+  padding:2px 8px; border-radius:10px; margin-bottom:6px;
+  background:var(--accent-bg); color:var(--accent);
+  border:1px solid var(--accent);
+}
+.je-source.from-practice { background:#eef6ee; color:#3a7d44; border-color:#7bbf86; }
+.je-note {
+  font-size:13px; line-height:1.6; color:var(--text-secondary);
+  margin-top:6px; padding:8px 10px; background:var(--bg);
+  border-radius:var(--radius-sm); white-space:pre-wrap; word-break:break-word;
+}
+
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-light); }
+.empty-state .empty-icon { font-size:48px; margin-bottom:12px; }
+.empty-state p { font-size:14px; line-height:1.6; }
+
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0; z-index:100;
+  height: var(--nav-height);
+  background: rgba(255,255,255,0.9);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.nav-item {
+  display:flex; flex-direction:column; align-items:center;
+  gap:3px; padding:6px 12px; cursor:pointer;
+  transition:var(--transition); border:none;
+  background:none; font-family:var(--font);
+}
+.nav-item .nav-icon { font-size:22px; transition:var(--transition); }
+.nav-item .nav-label { font-size:10px; color:var(--text-light); transition:var(--transition); }
+.nav-item.active .nav-icon { color:var(--accent); }
+.nav-item.active .nav-label { color:var(--accent); font-weight:600; }
+
+.modal-overlay {
+  position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(4px);
+  display:none; align-items:flex-end; justify-content:center;
+}
+.modal-overlay.show { display:flex; animation:fadeIn 0.3s ease; }
+.modal-content {
+  background:var(--bg-card); border-radius:20px 20px 0 0;
+  width:100%; max-width:500px; max-height:85vh;
+  overflow-y:auto; padding:24px 20px 40px;
+  animation:slideUp 0.3s ease;
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle { width:36px; height:4px; border-radius:2px; background:var(--border); margin:0 auto 16px; }
+.modal-emotion-name { font-size:28px; font-weight:700; text-align:center; margin-bottom:4px; }
+.modal-emotion-en { font-size:13px; color:var(--text-light); text-align:center; margin-bottom:16px; }
+.modal-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.modal-info-item { background:var(--bg); padding:12px; border-radius:var(--radius-sm); text-align:center; }
+.modal-info-item .label { font-size:11px; color:var(--text-light); margin-bottom:4px; }
+.modal-info-item .value { font-size:14px; font-weight:600; }
+.modal-section-title { font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text-secondary); }
+.modal-description {
+  font-size:14px; line-height:1.7; color:var(--text-secondary);
+  margin-bottom:20px; padding:12px;
+  background:var(--bg); border-radius:var(--radius-sm);
+}
+.modal-release-tip {
+  padding:14px; background:var(--accent-bg);
+  border-radius:var(--radius-sm); margin-bottom:20px;
+  font-size:14px; line-height:1.6; color:var(--accent);
+  border-left:3px solid var(--accent);
+}
+.modal-actions { display:flex; gap:10px; }
+.modal-btn {
+  flex:1; padding:14px; border-radius:var(--radius-sm);
+  border:none; font-size:15px; font-weight:600;
+  cursor:pointer; transition:var(--transition); font-family:var(--font);
+}
+.modal-btn.primary { background:var(--accent); color:#fff; }
+.modal-btn.secondary { background:var(--bg); color:var(--text-secondary); }
+
+@media (min-width:768px) {
+  .main-content { max-width:720px; margin:0 auto; }
+  .bottom-nav { max-width:720px; left:50%; transform:translateX(-50%); border-radius:16px 16px 0 0; }
+  .emotion-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .modal-content { border-radius:20px; margin-bottom:40px; max-height:80vh; }
+  .modal-overlay { align-items:center; }
+}
+@media (min-width:1024px) {
+  .main-content { max-width:800px; }
+  .bottom-nav { max-width:500px; }
+}
+
+.text-center { text-align:center; }
+.hidden { display:none !important; }
+
+@keyframes breathe {
+  0%, 100% { transform:scale(1); opacity:0.6; }
+  50% { transform:scale(1.15); opacity:1; }
+}
+.breathing-circle {
+  width:120px; height:120px; border-radius:50%;
+  background: radial-gradient(circle, var(--accent-light), var(--accent));
+  margin:20px auto;
+  animation: breathe 4s ease-in-out infinite;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:14px; font-weight:600;
+}
+
+.toast {
+  position:fixed; top:80px; left:50%; transform:translateX(-50%);
+  background:var(--bg-dark); color:#fff;
+  padding:12px 24px; border-radius:var(--radius-sm);
+  font-size:14px; z-index:300;
+  opacity:0; transition:var(--transition);
+  pointer-events:none;
+}
+.toast.show { opacity:1; }
+</style>
+<style>
+/* ===== Practice Book Module (练习本) ===== */
+.week-tabs { display:flex; gap:8px; margin-bottom:14px; }
+.week-tab { flex:1; padding:11px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-card); font-size:13px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:var(--transition); font-family:var(--font); }
+.week-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+.ex-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ex-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px; box-shadow:var(--shadow); cursor:pointer; transition:var(--transition); display:flex; flex-direction:column; min-height:140px; }
+.ex-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--accent-light); }
+.ex-card .ex-icon { font-size:22px; margin-bottom:6px; }
+.ex-card .ex-tag { font-size:10px; color:var(--accent); background:var(--accent-bg); align-self:flex-start; padding:2px 7px; border-radius:10px; margin-bottom:5px; }
+.ex-card .ex-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.ex-card .ex-desc { font-size:11.5px; color:var(--text-secondary); line-height:1.5; margin-bottom:8px; }
+.ex-card .ex-progress { font-size:10px; color:var(--accent); background:var(--accent-bg); align-self:flex-start; padding:2px 7px; border-radius:10px; margin-top:auto; }
+.prac-progress-pill { font-size:10px; padding:2px 7px; border-radius:10px; background:var(--accent-bg); color:var(--accent); }
+
+.back-btn { display:inline-flex; align-items:center; gap:4px; background:none; border:none; color:var(--accent); font-size:14px; cursor:pointer; font-family:var(--font); padding:4px 0; margin-bottom:12px; }
+.prac-detail-title { font-size:20px; font-weight:700; }
+.prac-detail-sub { font-size:13px; color:var(--text-secondary); margin:4px 0 12px; }
+.prac-hint { font-size:13px; line-height:1.6; color:var(--text-secondary); background:var(--accent-bg); padding:12px 14px; border-radius:var(--radius-sm); margin-bottom:16px; border-left:3px solid var(--accent); }
+
+.prac-col-wrap { display:grid; gap:12px; margin-bottom:16px; }
+.prac-col { background:var(--bg); border-radius:var(--radius-sm); padding:12px; }
+.prac-col-title { font-size:13px; font-weight:600; color:var(--accent); margin-bottom:8px; }
+
+.prac-item { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-xs); padding:10px 12px; margin-bottom:10px; box-shadow:var(--shadow); }
+.prac-item .pi-top { display:flex; align-items:center; gap:8px; }
+.prac-item .pi-text-input { flex:1; min-width:0; width:100%; border:none; background:transparent; font-size:14px; font-weight:600; color:var(--text); font-family:var(--font); outline:none; }
+.prac-item .pi-feel-input { width:100%; border:none; background:var(--accent-bg); border-radius:var(--radius-xs); padding:8px 10px; margin-top:8px; font-size:13px; color:var(--text-secondary); font-family:var(--font); outline:none; resize:vertical; line-height:1.5; }
+.prac-want { font-size:10px; padding:2px 6px; border-radius:8px; background:var(--accent-bg); color:var(--accent); white-space:nowrap; cursor:pointer; display:inline-block; margin-top:8px; }
+.prac-status { display:flex; gap:6px; margin-top:8px; }
+.pi-toggle { font-size:11px; padding:6px 9px; border-radius:10px; border:1px solid var(--border); background:var(--bg); color:var(--text-light); cursor:pointer; font-family:var(--font); white-space:nowrap; transition:var(--transition); flex:1; }
+.pi-toggle.released { background:var(--accent-light); color:#fff; border-color:var(--accent-light); }
+.pi-toggle.feeling { background:var(--accent); color:#fff; border-color:var(--accent); }
+.pi-toggle.feeling:disabled { opacity:.4; cursor:not-allowed; }
+.pi-del { background:none; border:none; color:var(--text-light); cursor:pointer; font-size:16px; padding:2px 4px; flex-shrink:0; }
+.pi-del:hover { color:#e74c3c; }
+.prac-src { font-size:11px; color:var(--text-light); margin:-4px 0 10px; letter-spacing:.3px; }
+.pi-feel-label { font-size:11px; color:var(--text-light); margin:8px 0 4px; }
+.prac-topic { display:flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:12px; }
+.prac-topic label { font-size:13px; font-weight:600; color:var(--accent); white-space:nowrap; }
+.prac-topic input { flex:1; border:none; outline:none; font-size:14px; font-family:var(--font); background:transparent; color:var(--text); }
+.prac-want-tip, .alt-tip { font-size:11px; color:var(--text-light); margin-bottom:6px; }
+.alt-tip { background:#fdf6ec; border:1px dashed var(--border); border-radius:var(--radius-sm); padding:8px 10px; margin:10px 0; line-height:1.6; color:var(--text-secondary); }
+.none-btn { padding:10px 12px; border:1px solid var(--border); background:#fff; border-radius:var(--radius-sm); cursor:pointer; font-size:13px; color:var(--text-secondary); font-family:var(--font); }
+.none-btn:hover { border-color:var(--accent); color:var(--accent); }
+.wish-box { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:14px; }
+.wish-t { font-size:14px; font-weight:600; color:var(--accent); margin-bottom:4px; }
+.wish-hint { font-size:11px; color:var(--text-light); line-height:1.6; margin-bottom:10px; }
+.wish-l { display:block; font-size:12px; color:var(--text-secondary); margin:10px 0 4px; font-weight:600; }
+.wish-i { width:100%; padding:10px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:13px; font-family:var(--font); outline:none; resize:vertical; line-height:1.7; color:var(--text); background:#fdfcfa; }
+.wish-i:focus { border-color:var(--accent); }
+.goal-sec-t { font-size:14px; font-weight:600; color:var(--accent); margin:18px 0 8px; }
+.goal-sec-t em { font-style:normal; font-size:11px; color:var(--text-light); font-weight:400; }
+.prac-rule span b { display:block; font-size:13px; font-weight:600; color:var(--text); line-height:1.5; }
+.prac-rule span i { display:block; font-style:normal; font-size:11px; color:var(--text-light); line-height:1.6; margin-top:3px; }
+.goal-ex { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:12px; }
+.goal-ex-cat { font-size:12px; font-weight:600; color:var(--accent); margin:10px 0 6px; }
+.goal-ex-cat:first-child { margin-top:0; }
+.goal-ex-i { font-size:12.5px; color:var(--text-secondary); line-height:1.7; padding:7px 10px; border-radius:var(--radius-sm); cursor:pointer; background:#fdfcfa; margin-bottom:5px; border:1px solid transparent; }
+.goal-ex-i:hover { border-color:var(--accent); color:var(--text); background:#fdf6ec; }
+.six-wrap { display:flex; flex-direction:column; gap:10px; }
+.six-step { display:flex; gap:12px; background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:14px; cursor:pointer; transition:all .2s; }
+.six-step:hover { border-color:var(--accent); }
+.six-step.done { background:#f4f9f4; border-color:#8fae8b; }
+.six-no { flex-shrink:0; font-size:13px; font-weight:600; color:var(--accent); width:42px; }
+.six-step.done .six-no { color:#5f8a5b; }
+.six-txt { font-size:13px; line-height:1.8; color:var(--text-secondary); }
+.ticket { margin-top:18px; background:#fdf6ec; border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+.ticket-t { font-size:14px; font-weight:600; color:var(--accent); margin-bottom:10px; }
+.ticket-i { font-size:13px; line-height:1.8; color:var(--text-secondary); margin-bottom:6px; }
+.ticket-q { margin-top:10px; font-size:13px; color:var(--accent); font-weight:600; }
+.gain-types { display:flex; flex-wrap:wrap; gap:6px; }
+.gain-chip { padding:6px 10px; border:1px solid var(--border); background:#fff; border-radius:14px; font-size:11.5px; cursor:pointer; color:var(--text-secondary); font-family:var(--font); }
+.gain-chip:hover { border-color:var(--accent); }
+.gain-chip.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+
+.prac-add { display:flex; gap:8px; margin-top:8px; }
+.prac-add input { flex:1; padding:10px 12px; border:1px solid var(--border); border-radius:var(--radius-xs); font-size:14px; font-family:var(--font); outline:none; }
+.prac-add button { padding:10px 16px; border:none; border-radius:var(--radius-xs); background:var(--accent); color:#fff; font-size:14px; cursor:pointer; font-family:var(--font); }
+
+.prac-actions { display:flex; gap:10px; margin-top:16px; }
+.prac-actions button { flex:1; padding:14px; border-radius:var(--radius-sm); border:none; font-size:14px; font-weight:600; cursor:pointer; font-family:var(--font); }
+.prac-actions .release-go { background:var(--accent); color:#fff; }
+.prac-actions .gain-go { background:var(--bg); color:var(--text-secondary); }
+
+/* want selector */
+.prac-want-bar { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.prac-want-bar .pi-toggle { text-align:center; padding:8px 4px; }
+
+/* goal exercise */
+.prac-goal-input { width:100%; padding:12px; border:1px solid var(--border); border-radius:var(--radius-sm); font-size:14px; font-family:var(--font); outline:none; margin-bottom:12px; resize:vertical; min-height:64px; }
+.prac-rules { background:var(--bg); border-radius:var(--radius-sm); padding:12px; margin-bottom:16px; }
+.prac-rule { display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--text-secondary); margin-bottom:7px; line-height:1.5; }
+.prac-rule input { margin-top:2px; flex-shrink:0; }
+
+</style>
+<body>
+
+<header class="app-header">
+  <div>
+    <h1>情绪释放工作台</h1>
+    <div class="subtitle">圣多纳释放法 - 情绪觉知与释放</div>
+  </div>
+</header>
+
+<div class="main-content">
+
+  <div class="page active" id="page-search">
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="搜索你当下的感受..." autocomplete="off">
+        <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+      </div>
+      <div class="quick-tags" id="quickTags">
+        <button class="quick-tag" onclick="quickSearch('焦虑')">焦虑</button>
+        <button class="quick-tag" onclick="quickSearch('愤怒')">愤怒</button>
+        <button class="quick-tag" onclick="quickSearch('悲伤')">悲伤</button>
+        <button class="quick-tag" onclick="quickSearch('恐惧')">恐惧</button>
+        <button class="quick-tag" onclick="quickSearch('无力')">无力</button>
+        <button class="quick-tag" onclick="quickSearch('烦躁')">烦躁</button>
+        <button class="quick-tag" onclick="quickSearch('迷茫')">迷茫</button>
+        <button class="quick-tag" onclick="quickSearch('孤独')">孤独</button>
+      </div>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="empty-state" id="searchEmpty">
+        <div class="empty-icon">🌊</div>
+        <p>输入你当下感受到的情绪词汇<br>或点击上方标签快速搜索<br><br>找到情绪，是释放的第一步</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-hierarchy">
+    <div class="hierarchy-root">
+      <div class="root-label">波澜不惊</div>
+      <div class="root-sub">— 情绪释放的终极状态 —</div>
+    </div>
+    <div id="hierarchyContent"><div class="desire-section"><div class="desire-header"><span class="desire-icon">️</span><div><div class="desire-title">想要安全稳妥、想生存</div><div class="desire-subtitle">3 个情绪类别</div></div></div><div class="category-card" id="cat-apathy"><div class="category-header" onclick="toggleCategory('apathy')"><div class="category-color" style="background:#4a4a4a"></div><div class="category-name">万念俱灰</div><div class="category-count">53 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('apathy','无聊')">无聊</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','无感')">无感</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','粗心大意')">粗心大意</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','冷漠')">冷漠</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','停止')">停止</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','死亡')">死亡</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','被打败')">被打败</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','沮丧')">沮丧</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','绝望')">绝望</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','崩溃')">崩溃</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','绝望')">绝望</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','精疲力竭')">精疲力竭</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','幻想破灭')">幻想破灭</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','死定了')">死定了</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','心碎的')">心碎的</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','失败')">失败</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','可遗忘的')">可遗忘的</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','没出息')">没出息</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','放弃')">放弃</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','冷酷无情的')">冷酷无情的</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','没有希望')">没有希望</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','没有幽默感')">没有幽默感</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','我不行')">我不行</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','我不在乎')">我不在乎</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','我没有价值')">我没有价值</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','漫不经心')">漫不经心</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','优柔寡断')">优柔寡断</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','没有存在感')">没有存在感</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','太晚了')">太晚了</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','懒惰')">懒惰</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','再等等吧')">再等等吧</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','无精打采')">无精打采</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','失败者')">失败者</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','失败的')">失败的</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','退缩')">退缩</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','麻木不仁')">麻木不仁</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','击溃')">击溃</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','无能')">无能</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','认命')">认命</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','宿命')">宿命</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','孤苦')">孤苦</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','魂不守舍')">魂不守舍</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','神志恍惚')">神志恍惚</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','停滞不前')">停滞不前</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','太惨')">太惨</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','冷酷无情')">冷酷无情</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','漫无目的')">漫无目的</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','没用')">没用</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','模糊不清')">模糊不清</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','成虫')">成虫</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','有什么用呢')">有什么用呢</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','为什么要活呢')">为什么要活呢</div><div class="emotion-chip" onclick="showEmotionDetail('apathy','不值得')">不值得</div></div></div></div><div class="category-card" id="cat-grief"><div class="category-header" onclick="toggleCategory('grief')"><div class="category-color" style="background:#5b6abf"></div><div class="category-name">悲苦</div><div class="category-count">47 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('grief','被遗弃')">被遗弃</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被羞辱')">被羞辱</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被控告')">被控告</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被控诉苦')">被控诉苦</div><div class="emotion-chip" onclick="showEmotionDetail('grief','丢脸')">丢脸</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被背叛')">被背叛</div><div class="emotion-chip" onclick="showEmotionDetail('grief','忧郁')">忧郁</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被欺骗')">被欺骗</div><div class="emotion-chip" onclick="showEmotionDetail('grief','绝望')">绝望</div><div class="emotion-chip" onclick="showEmotionDetail('grief','失望')">失望</div><div class="emotion-chip" onclick="showEmotionDetail('grief','心烦意乱')">心烦意乱</div><div class="emotion-chip" onclick="showEmotionDetail('grief','尴尬的')">尴尬的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被忘掉')">被忘掉</div><div class="emotion-chip" onclick="showEmotionDetail('grief','愧疚的')">愧疚的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','无望的')">无望的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','头痛')">头痛</div><div class="emotion-chip" onclick="showEmotionDetail('grief','沮丧')">沮丧</div><div class="emotion-chip" onclick="showEmotionDetail('grief','无助的')">无助的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','受伤')">受伤</div><div class="emotion-chip" onclick="showEmotionDetail('grief','要是就好了')">要是就好了</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被忽略的')">被忽略的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','不够')">不够</div><div class="emotion-chip" onclick="showEmotionDetail('grief','伤心欲绝')">伤心欲绝</div><div class="emotion-chip" onclick="showEmotionDetail('grief','不公平')">不公平</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被遗忘')">被遗忘</div><div class="emotion-chip" onclick="showEmotionDetail('grief','极度渴望')">极度渴望</div><div class="emotion-chip" onclick="showEmotionDetail('grief','损失')">损失</div><div class="emotion-chip" onclick="showEmotionDetail('grief','哀怨')">哀怨</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被误解')">被误解</div><div class="emotion-chip" onclick="showEmotionDetail('grief','没人关心我')">没人关心我</div><div class="emotion-chip" onclick="showEmotionDetail('grief','没人爱我')">没人爱我</div><div class="emotion-chip" onclick="showEmotionDetail('grief','乡怨')">乡怨</div><div class="emotion-chip" onclick="showEmotionDetail('grief','错失')">错失</div><div class="emotion-chip" onclick="showEmotionDetail('grief','遗憾')">遗憾</div><div class="emotion-chip" onclick="showEmotionDetail('grief','可怜的我')">可怜的我</div><div class="emotion-chip" onclick="showEmotionDetail('grief','懊悔')">懊悔</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被剥夺的')">被剥夺的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','悲哀')">悲哀</div><div class="emotion-chip" onclick="showEmotionDetail('grief','悲痛')">悲痛</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被人落泊的')">被人落泊的</div><div class="emotion-chip" onclick="showEmotionDetail('grief','被折磨')">被折磨</div><div class="emotion-chip" onclick="showEmotionDetail('grief','不被爱')">不被爱</div><div class="emotion-chip" onclick="showEmotionDetail('grief','不开心')">不开心</div><div class="emotion-chip" onclick="showEmotionDetail('grief','没人要')">没人要</div><div class="emotion-chip" onclick="showEmotionDetail('grief','脆弱')">脆弱</div><div class="emotion-chip" onclick="showEmotionDetail('grief','为什么是我')">为什么是我</div><div class="emotion-chip" onclick="showEmotionDetail('grief','受伤的')">受伤的</div></div></div></div><div class="category-card" id="cat-fear"><div class="category-header" onclick="toggleCategory('fear')"><div class="category-color" style="background:#7b68ae"></div><div class="category-name">恐惧</div><div class="category-count">43 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('fear','焦虑')">焦虑</div><div class="emotion-chip" onclick="showEmotionDetail('fear','不安')">不安</div><div class="emotion-chip" onclick="showEmotionDetail('fear','小心谨慎')">小心谨慎</div><div class="emotion-chip" onclick="showEmotionDetail('fear','又冷又疑')">又冷又疑</div><div class="emotion-chip" onclick="showEmotionDetail('fear','胆小怯懦')">胆小怯懦</div><div class="emotion-chip" onclick="showEmotionDetail('fear','自我防卫')">自我防卫</div><div class="emotion-chip" onclick="showEmotionDetail('fear','不信任')">不信任</div><div class="emotion-chip" onclick="showEmotionDetail('fear','怀疑')">怀疑</div><div class="emotion-chip" onclick="showEmotionDetail('fear','害怕')">害怕</div><div class="emotion-chip" onclick="showEmotionDetail('fear','尴尬的')">尴尬的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','逃避的')">逃避的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','紧张的')">紧张的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','狂乱的')">狂乱的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','犹豫不决')">犹豫不决</div><div class="emotion-chip" onclick="showEmotionDetail('fear','紧张的')">紧张的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','歇斯底里')">歇斯底里</div><div class="emotion-chip" onclick="showEmotionDetail('fear','拘束的')">拘束的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','紧张')">紧张</div><div class="emotion-chip" onclick="showEmotionDetail('fear','恐慌')">恐慌</div><div class="emotion-chip" onclick="showEmotionDetail('fear','紧张')">紧张</div><div class="emotion-chip" onclick="showEmotionDetail('fear','偏执狂')">偏执狂</div><div class="emotion-chip" onclick="showEmotionDetail('fear','被吓到的')">被吓到的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','偷偷摸摸')">偷偷摸摸</div><div class="emotion-chip" onclick="showEmotionDetail('fear','不可靠')">不可靠</div><div class="emotion-chip" onclick="showEmotionDetail('fear','焦虑')">焦虑</div><div class="emotion-chip" onclick="showEmotionDetail('fear','怀疑的')">怀疑的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','忧郁')">忧郁</div><div class="emotion-chip" onclick="showEmotionDetail('fear','被吓坏的')">被吓坏的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','多疑的')">多疑的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','局促生硬')">局促生硬</div><div class="emotion-chip" onclick="showEmotionDetail('fear','被吓坏的')">被吓坏的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','被威胁的')">被威胁的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','羞怯')">羞怯</div><div class="emotion-chip" onclick="showEmotionDetail('fear','陷入困境')">陷入困境</div><div class="emotion-chip" onclick="showEmotionDetail('fear','迟疑不决')">迟疑不决</div><div class="emotion-chip" onclick="showEmotionDetail('fear','心神不宁')">心神不宁</div><div class="emotion-chip" onclick="showEmotionDetail('fear','被恐吓的')">被恐吓的</div><div class="emotion-chip" onclick="showEmotionDetail('fear','想逃')">想逃</div><div class="emotion-chip" onclick="showEmotionDetail('fear','逃避')">逃避</div><div class="emotion-chip" onclick="showEmotionDetail('fear','小心翼翼')">小心翼翼</div><div class="emotion-chip" onclick="showEmotionDetail('fear','担心')">担心</div><div class="emotion-chip" onclick="showEmotionDetail('fear','恐惧')">恐惧</div><div class="emotion-chip" onclick="showEmotionDetail('fear','惊骇')">惊骇</div></div></div></div></div><div class="desire-section"><div class="desire-header"><span class="desire-icon">❤️</span><div><div class="desire-title">想要被认同</div><div class="desire-subtitle">2 个情绪类别</div></div></div><div class="category-card" id="cat-desire"><div class="category-header" onclick="toggleCategory('desire')"><div class="category-color" style="background:#c0392b"></div><div class="category-name">贪求</div><div class="category-count">37 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('desire','放弃')">放弃</div><div class="emotion-chip" onclick="showEmotionDetail('desire','预测')">预测</div><div class="emotion-chip" onclick="showEmotionDetail('desire','冷酷无情')">冷酷无情</div><div class="emotion-chip" onclick="showEmotionDetail('desire','等不了')">等不了</div><div class="emotion-chip" onclick="showEmotionDetail('desire','冲动')">冲动</div><div class="emotion-chip" onclick="showEmotionDetail('desire','渴求')">渴求</div><div class="emotion-chip" onclick="showEmotionDetail('desire','渴求的')">渴求的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','被驱使的')">被驱使的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','轻浮的')">轻浮的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','操纵的')">操纵的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','嫉妒')">嫉妒</div><div class="emotion-chip" onclick="showEmotionDetail('desire','剥削')">剥削</div><div class="emotion-chip" onclick="showEmotionDetail('desire','过度依恋')">过度依恋</div><div class="emotion-chip" onclick="showEmotionDetail('desire','贪婪的')">贪婪的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','失意的')">失意的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','贪求')">贪求</div><div class="emotion-chip" onclick="showEmotionDetail('desire','囤积')">囤积</div><div class="emotion-chip" onclick="showEmotionDetail('desire','饥饿')">饥饿</div><div class="emotion-chip" onclick="showEmotionDetail('desire','我想')">我想</div><div class="emotion-chip" onclick="showEmotionDetail('desire','不耐烦')">不耐烦</div><div class="emotion-chip" onclick="showEmotionDetail('desire','好色的')">好色的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','浮荡的')">浮荡的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','操纵别人')">操纵别人</div><div class="emotion-chip" onclick="showEmotionDetail('desire','幸运的')">幸运的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','一定要得到')">一定要得到</div><div class="emotion-chip" onclick="showEmotionDetail('desire','从来不满足')">从来不满足</div><div class="emotion-chip" onclick="showEmotionDetail('desire','永不满足')">永不满足</div><div class="emotion-chip" onclick="showEmotionDetail('desire','没意识的')">没意识的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','着迷的')">着迷的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','渴望强盛的')">渴望强盛的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','固执己见')">固执己见</div><div class="emotion-chip" onclick="showEmotionDetail('desire','鲁莽')">鲁莽</div><div class="emotion-chip" onclick="showEmotionDetail('desire','残忍的')">残忍的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','算计吞噬')">算计吞噬</div><div class="emotion-chip" onclick="showEmotionDetail('desire','自私的')">自私的</div><div class="emotion-chip" onclick="showEmotionDetail('desire','如饥似渴')">如饥似渴</div><div class="emotion-chip" onclick="showEmotionDetail('desire','战壕')">战壕</div></div></div></div><div class="category-card" id="cat-anger"><div class="category-header" onclick="toggleCategory('anger')"><div class="category-color" style="background:#e74c3c"></div><div class="category-name">愤怒</div><div class="category-count">53 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('anger','伤人感情的')">伤人感情的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','好斗的')">好斗的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','挑衅的')">挑衅的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','好辩的')">好辩的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','好战的')">好战的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','激烈')">激烈</div><div class="emotion-chip" onclick="showEmotionDetail('anger','令人愤慨的')">令人愤慨的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','刻薄的')">刻薄的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','挑衅的')">挑衅的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','苛求的')">苛求的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','毁灭性的')">毁灭性的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','嫉妒的')">嫉妒的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','脾气暴躁')">脾气暴躁</div><div class="emotion-chip" onclick="showEmotionDetail('anger','凶猛的')">凶猛的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','讽刺的')">讽刺的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','气愤')">气愤</div><div class="emotion-chip" onclick="showEmotionDetail('anger','愤慨')">愤慨</div><div class="emotion-chip" onclick="showEmotionDetail('anger','狂怒的')">狂怒的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','严厉')">严厉</div><div class="emotion-chip" onclick="showEmotionDetail('anger','憎恨')">憎恨</div><div class="emotion-chip" onclick="showEmotionDetail('anger','敌意')">敌意</div><div class="emotion-chip" onclick="showEmotionDetail('anger','不耐烦')">不耐烦</div><div class="emotion-chip" onclick="showEmotionDetail('anger','愤愤不平')">愤愤不平</div><div class="emotion-chip" onclick="showEmotionDetail('anger','生气')">生气</div><div class="emotion-chip" onclick="showEmotionDetail('anger','舒适')">舒适</div><div class="emotion-chip" onclick="showEmotionDetail('anger','怒气冲冲')">怒气冲冲</div><div class="emotion-chip" onclick="showEmotionDetail('anger','疯狂')">疯狂</div><div class="emotion-chip" onclick="showEmotionDetail('anger','卑鄙')">卑鄙</div><div class="emotion-chip" onclick="showEmotionDetail('anger','残忍')">残忍</div><div class="emotion-chip" onclick="showEmotionDetail('anger','凶残的')">凶残的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','又愤世嫉俗')">又愤世嫉俗</div><div class="emotion-chip" onclick="showEmotionDetail('anger','偏执的')">偏执的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','坏脾气')">坏脾气</div><div class="emotion-chip" onclick="showEmotionDetail('anger','报复的')">报复的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','粗鲁')">粗鲁</div><div class="emotion-chip" onclick="showEmotionDetail('anger','怨恨')">怨恨</div><div class="emotion-chip" onclick="showEmotionDetail('anger','自私')">自私</div><div class="emotion-chip" onclick="showEmotionDetail('anger','粗鲁')">粗鲁</div><div class="emotion-chip" onclick="showEmotionDetail('anger','野蛮')">野蛮</div><div class="emotion-chip" onclick="showEmotionDetail('anger','冲突激化')">冲突激化</div><div class="emotion-chip" onclick="showEmotionDetail('anger','怒气冲天')">怒气冲天</div><div class="emotion-chip" onclick="showEmotionDetail('anger','五内俱焚')">五内俱焚</div><div class="emotion-chip" onclick="showEmotionDetail('anger','怀恨在心')">怀恨在心</div><div class="emotion-chip" onclick="showEmotionDetail('anger','钢铁般的')">钢铁般的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','有意')">有意</div><div class="emotion-chip" onclick="showEmotionDetail('anger','倔强')">倔强</div><div class="emotion-chip" onclick="showEmotionDetail('anger','偏执')">偏执</div><div class="emotion-chip" onclick="showEmotionDetail('anger','复仇心切')">复仇心切</div><div class="emotion-chip" onclick="showEmotionDetail('anger','恶毒')">恶毒</div><div class="emotion-chip" onclick="showEmotionDetail('anger','暴力')">暴力</div><div class="emotion-chip" onclick="showEmotionDetail('anger','易爆发的')">易爆发的</div><div class="emotion-chip" onclick="showEmotionDetail('anger','意志薄弱')">意志薄弱</div><div class="emotion-chip" onclick="showEmotionDetail('anger','任性的')">任性的</div></div></div></div></div><div class="desire-section"><div class="desire-header"><span class="desire-icon"></span><div><div class="desire-title">想要控制</div><div class="desire-subtitle">4 个情绪类别</div></div></div><div class="category-card" id="cat-pride"><div class="category-header" onclick="toggleCategory('pride')"><div class="category-color" style="background:#f39c12"></div><div class="category-name">自尊自傲</div><div class="category-count">49 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('pride','无家可寻')">无家可寻</div><div class="emotion-chip" onclick="showEmotionDetail('pride','超然离群')">超然离群</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自恋')">自恋</div><div class="emotion-chip" onclick="showEmotionDetail('pride','固执己见')">固执己见</div><div class="emotion-chip" onclick="showEmotionDetail('pride','无聊')">无聊</div><div class="emotion-chip" onclick="showEmotionDetail('pride','聪明')">聪明</div><div class="emotion-chip" onclick="showEmotionDetail('pride','封闭的')">封闭的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','沾沾自喜')">沾沾自喜</div><div class="emotion-chip" onclick="showEmotionDetail('pride','思路清晰')">思路清晰</div><div class="emotion-chip" onclick="showEmotionDetail('pride','轻蔑的')">轻蔑的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','酷')">酷</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自信的')">自信的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','鄙弃')">鄙弃</div><div class="emotion-chip" onclick="showEmotionDetail('pride','傲慢专断')">傲慢专断</div><div class="emotion-chip" onclick="showEmotionDetail('pride','批判的')">批判的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','虚度美德')">虚度美德</div><div class="emotion-chip" onclick="showEmotionDetail('pride','扬扬得意')">扬扬得意</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自以为是')">自以为是</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自以为是')">自以为是</div><div class="emotion-chip" onclick="showEmotionDetail('pride','成功')">成功</div><div class="emotion-chip" onclick="showEmotionDetail('pride','不悦地')">不悦地</div><div class="emotion-chip" onclick="showEmotionDetail('pride','批量的')">批量的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','批判性的')">批判性的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自命无所不知的')">自命无所不知的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','心胸狭隘')">心胸狭隘</div><div class="emotion-chip" onclick="showEmotionDetail('pride','永远无法不错')">永远无法不错</div><div class="emotion-chip" onclick="showEmotionDetail('pride','武断')">武断</div><div class="emotion-chip" onclick="showEmotionDetail('pride','盛气凌人')">盛气凌人</div><div class="emotion-chip" onclick="showEmotionDetail('pride','神气十足')">神气十足</div><div class="emotion-chip" onclick="showEmotionDetail('pride','偏颇的')">偏颇的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','成见')">成见</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自以为是公正的')">自以为是公正的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','愤世不忌')">愤世不忌</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自恋的')">自恋的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自鸣得意')">自鸣得意</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自私')">自私</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自命不凡')">自命不凡</div><div class="emotion-chip" onclick="showEmotionDetail('pride','势利眼')">势利眼</div><div class="emotion-chip" onclick="showEmotionDetail('pride','独特')">独特</div><div class="emotion-chip" onclick="showEmotionDetail('pride','被宠坏的')">被宠坏的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','禁欲主义')">禁欲主义</div><div class="emotion-chip" onclick="showEmotionDetail('pride','顽固不化')">顽固不化</div><div class="emotion-chip" onclick="showEmotionDetail('pride','自高自大')">自高自大</div><div class="emotion-chip" onclick="showEmotionDetail('pride','优越感')">优越感</div><div class="emotion-chip" onclick="showEmotionDetail('pride','强硬不妥协')">强硬不妥协</div><div class="emotion-chip" onclick="showEmotionDetail('pride','无感觉的')">无感觉的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','不受影响的')">不受影响的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','不屈服的')">不屈服的</div><div class="emotion-chip" onclick="showEmotionDetail('pride','爱慕虚荣')">爱慕虚荣</div></div></div></div><div class="category-card" id="cat-courage"><div class="category-header" onclick="toggleCategory('courage')"><div class="category-color" style="background:#27ae60"></div><div class="category-name">无畏</div><div class="category-count">50 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('courage','喜欢冒险的')">喜欢冒险的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','警惕的')">警惕的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','自由的')">自由的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','胸有成竹的')">胸有成竹的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','机警的')">机警的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','有中心的')">有中心的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','有把握的')">有把握的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','愉快')">愉快</div><div class="emotion-chip" onclick="showEmotionDetail('courage','思路清晰')">思路清晰</div><div class="emotion-chip" onclick="showEmotionDetail('courage','怜悯')">怜悯</div><div class="emotion-chip" onclick="showEmotionDetail('courage','能干的')">能干的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','自信的')">自信的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','创新的')">创新的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','大胆')">大胆</div><div class="emotion-chip" onclick="showEmotionDetail('courage','果断的')">果断的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','有活力')">有活力</div><div class="emotion-chip" onclick="showEmotionDetail('courage','热心的')">热心的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','热情')">热情</div><div class="emotion-chip" onclick="showEmotionDetail('courage','自以为是')">自以为是</div><div class="emotion-chip" onclick="showEmotionDetail('courage','成功')">成功</div><div class="emotion-chip" onclick="showEmotionDetail('courage','探索')">探索</div><div class="emotion-chip" onclick="showEmotionDetail('courage','灵活的')">灵活的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','专注的')">专注的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','乐善好施')">乐善好施</div><div class="emotion-chip" onclick="showEmotionDetail('courage','开心')">开心</div><div class="emotion-chip" onclick="showEmotionDetail('courage','可敬的')">可敬的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','幽默')">幽默</div><div class="emotion-chip" onclick="showEmotionDetail('courage','独立的')">独立的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','首创精神')">首创精神</div><div class="emotion-chip" onclick="showEmotionDetail('courage','直觉')">直觉</div><div class="emotion-chip" onclick="showEmotionDetail('courage','所向披靡')">所向披靡</div><div class="emotion-chip" onclick="showEmotionDetail('courage','有爱的')">有爱的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','头脑清楚')">头脑清楚</div><div class="emotion-chip" onclick="showEmotionDetail('courage','自强不息')">自强不息</div><div class="emotion-chip" onclick="showEmotionDetail('courage','来者不拒')">来者不拒</div><div class="emotion-chip" onclick="showEmotionDetail('courage','开放')">开放</div><div class="emotion-chip" onclick="showEmotionDetail('courage','乐观')">乐观</div><div class="emotion-chip" onclick="showEmotionDetail('courage','洞察力')">洞察力</div><div class="emotion-chip" onclick="showEmotionDetail('courage','积极')">积极</div><div class="emotion-chip" onclick="showEmotionDetail('courage','意志坚强')">意志坚强</div><div class="emotion-chip" onclick="showEmotionDetail('courage','敏感的')">敏感的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','坚强的')">坚强的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','自给自足')">自给自足</div><div class="emotion-chip" onclick="showEmotionDetail('courage','犀利的')">犀利的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','坚定的')">坚定的</div><div class="emotion-chip" onclick="showEmotionDetail('courage','助人为乐')">助人为乐</div><div class="emotion-chip" onclick="showEmotionDetail('courage','不知疲惫')">不知疲惫</div><div class="emotion-chip" onclick="showEmotionDetail('courage','精力充沛')">精力充沛</div><div class="emotion-chip" onclick="showEmotionDetail('courage','乐意')">乐意</div><div class="emotion-chip" onclick="showEmotionDetail('courage','热忱')">热忱</div></div></div></div><div class="category-card" id="cat-acceptance"><div class="category-header" onclick="toggleCategory('acceptance')"><div class="category-color" style="background:#2ecc71"></div><div class="category-name">接纳</div><div class="category-count">40 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('acceptance','丰盛')">丰盛</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','有能力的')">有能力的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','自豪')">自豪</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','平衡')">平衡</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','归属感')">归属感</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','天生灵魂')">天生灵魂</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','同情心')">同情心</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','体贴的')">体贴的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','高兴')">高兴</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','兴高采烈')">兴高采烈</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','拥抱')">拥抱</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','善解人意')">善解人意</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','丰富')">丰富</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','一切都很好')">一切都很好</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','友善的')">友善的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','丰满')">丰满</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','温柔')">温柔</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','热情洋溢')">热情洋溢</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','亲切的')">亲切的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','和睦的')">和睦的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','和谐')">和谐</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','直觉的')">直觉的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','合拍')">合拍</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','令人高兴的')">令人高兴的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','富有爱心的')">富有爱心的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','爱恋大量')">爱恋大量</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','乐于接受')">乐于接受</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','轻松自如')">轻松自如</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','无冕更改')">无冕更改</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','开放')">开放</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','幽默的')">幽默的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','容光焕发')">容光焕发</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','善于接受')">善于接受</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','稳当的')">稳当的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','温和的')">温和的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','柔和的')">柔和的</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','理解')">理解</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','温暖')">温暖</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','幸福')">幸福</div><div class="emotion-chip" onclick="showEmotionDetail('acceptance','奇迹')">奇迹</div></div></div></div><div class="category-card" id="cat-peace"><div class="category-header" onclick="toggleCategory('peace')"><div class="category-color" style="background:#1abc9c"></div><div class="category-name">平和</div><div class="category-count">21 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid"><div class="emotion-chip" onclick="showEmotionDetail('peace','永不衰老')">永不衰老</div><div class="emotion-chip" onclick="showEmotionDetail('peace','有觉性的')">有觉性的</div><div class="emotion-chip" onclick="showEmotionDetail('peace','存在')">存在</div><div class="emotion-chip" onclick="showEmotionDetail('peace','无边无际')">无边无际</div><div class="emotion-chip" onclick="showEmotionDetail('peace','镇定')">镇定</div><div class="emotion-chip" onclick="showEmotionDetail('peace','不朽')">不朽</div><div class="emotion-chip" onclick="showEmotionDetail('peace','自由')">自由</div><div class="emotion-chip" onclick="showEmotionDetail('peace','满足的')">满足的</div><div class="emotion-chip" onclick="showEmotionDetail('peace','热情洋溢')">热情洋溢</div><div class="emotion-chip" onclick="showEmotionDetail('peace','轻松')">轻松</div><div class="emotion-chip" onclick="showEmotionDetail('peace','同一性')">同一性</div><div class="emotion-chip" onclick="showEmotionDetail('peace','完美')">完美</div><div class="emotion-chip" onclick="showEmotionDetail('peace','纯粹')">纯粹</div><div class="emotion-chip" onclick="showEmotionDetail('peace','安静')">安静</div><div class="emotion-chip" onclick="showEmotionDetail('peace','宁静')">宁静</div><div class="emotion-chip" onclick="showEmotionDetail('peace','无限空间')">无限空间</div><div class="emotion-chip" onclick="showEmotionDetail('peace','静止')">静止</div><div class="emotion-chip" onclick="showEmotionDetail('peace','永恒的')">永恒的</div><div class="emotion-chip" onclick="showEmotionDetail('peace','安宁')">安宁</div><div class="emotion-chip" onclick="showEmotionDetail('peace','无限')">无限</div><div class="emotion-chip" onclick="showEmotionDetail('peace','完整')">完整</div></div></div></div></div></div>
+  </div>
+
+  <div class="page" id="page-release">
+    <div class="release-intro">
+      <div class="big-icon">🧘</div>
+      <h2>引导式释放</h2>
+      <p>跟随圣多纳释放法的核心提问流程<br>逐步释放你当下的情绪</p>
+    </div>
+    <div class="current-emotion-display" id="currentEmotionDisplay">
+      <div class="ce-name" id="ceName"></div>
+      <div class="ce-category" id="ceCategory"></div>
+      <div class="ce-desire" id="ceDesire"></div>
+    </div>
+    <div class="release-progress" id="releaseProgress"><div class="progress-dot active"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div><div class="progress-dot"></div></div>
+    <div class="release-steps" id="releaseSteps"><div class="release-step active"><div class="step-number">1</div><div class="step-question">你现在的感受是什么？</div><div class="step-hint">花一点时间，感受你身体里的情绪。不需要分析，只需要觉察。是紧张？愤怒？悲伤？还是别的什么？</div><div class="step-hint">从下方选择最接近你当下感受的情绪，或搜索你的情绪：</div><div style="display:flex;gap:8px;margin-bottom:12px;"><input type="text" id="releaseSearchInput" placeholder="搜索情绪..." style="flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:var(--font);outline:none;" oninput="filterReleaseEmotions(this.value)"></div><div id="releaseEmotionList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;max-height:200px;overflow-y:auto;padding:4px;"><div class="emotion-chip release-emotion-chip" data-name="无聊" onclick="selectReleaseEmotion('无聊','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">无聊</div><div class="emotion-chip release-emotion-chip" data-name="无感" onclick="selectReleaseEmotion('无感','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">无感</div><div class="emotion-chip release-emotion-chip" data-name="粗心大意" onclick="selectReleaseEmotion('粗心大意','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">粗心大意</div><div class="emotion-chip release-emotion-chip" data-name="冷漠" onclick="selectReleaseEmotion('冷漠','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">冷漠</div><div class="emotion-chip release-emotion-chip" data-name="停止" onclick="selectReleaseEmotion('停止','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">停止</div><div class="emotion-chip release-emotion-chip" data-name="死亡" onclick="selectReleaseEmotion('死亡','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">死亡</div><div class="emotion-chip release-emotion-chip" data-name="被打败" onclick="selectReleaseEmotion('被打败','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">被打败</div><div class="emotion-chip release-emotion-chip" data-name="沮丧" onclick="selectReleaseEmotion('沮丧','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">沮丧</div><div class="emotion-chip release-emotion-chip" data-name="绝望" onclick="selectReleaseEmotion('绝望','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">绝望</div><div class="emotion-chip release-emotion-chip" data-name="崩溃" onclick="selectReleaseEmotion('崩溃','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">崩溃</div><div class="emotion-chip release-emotion-chip" data-name="绝望" onclick="selectReleaseEmotion('绝望','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">绝望</div><div class="emotion-chip release-emotion-chip" data-name="精疲力竭" onclick="selectReleaseEmotion('精疲力竭','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">精疲力竭</div><div class="emotion-chip release-emotion-chip" data-name="幻想破灭" onclick="selectReleaseEmotion('幻想破灭','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">幻想破灭</div><div class="emotion-chip release-emotion-chip" data-name="死定了" onclick="selectReleaseEmotion('死定了','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">死定了</div><div class="emotion-chip release-emotion-chip" data-name="心碎的" onclick="selectReleaseEmotion('心碎的','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">心碎的</div><div class="emotion-chip release-emotion-chip" data-name="失败" onclick="selectReleaseEmotion('失败','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">失败</div><div class="emotion-chip release-emotion-chip" data-name="可遗忘的" onclick="selectReleaseEmotion('可遗忘的','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">可遗忘的</div><div class="emotion-chip release-emotion-chip" data-name="没出息" onclick="selectReleaseEmotion('没出息','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">没出息</div><div class="emotion-chip release-emotion-chip" data-name="放弃" onclick="selectReleaseEmotion('放弃','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">放弃</div><div class="emotion-chip release-emotion-chip" data-name="冷酷无情的" onclick="selectReleaseEmotion('冷酷无情的','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">冷酷无情的</div><div class="emotion-chip release-emotion-chip" data-name="没有希望" onclick="selectReleaseEmotion('没有希望','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">没有希望</div><div class="emotion-chip release-emotion-chip" data-name="没有幽默感" onclick="selectReleaseEmotion('没有幽默感','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">没有幽默感</div><div class="emotion-chip release-emotion-chip" data-name="我不行" onclick="selectReleaseEmotion('我不行','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">我不行</div><div class="emotion-chip release-emotion-chip" data-name="我不在乎" onclick="selectReleaseEmotion('我不在乎','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">我不在乎</div><div class="emotion-chip release-emotion-chip" data-name="我没有价值" onclick="selectReleaseEmotion('我没有价值','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">我没有价值</div><div class="emotion-chip release-emotion-chip" data-name="漫不经心" onclick="selectReleaseEmotion('漫不经心','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">漫不经心</div><div class="emotion-chip release-emotion-chip" data-name="优柔寡断" onclick="selectReleaseEmotion('优柔寡断','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">优柔寡断</div><div class="emotion-chip release-emotion-chip" data-name="没有存在感" onclick="selectReleaseEmotion('没有存在感','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">没有存在感</div><div class="emotion-chip release-emotion-chip" data-name="太晚了" onclick="selectReleaseEmotion('太晚了','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">太晚了</div><div class="emotion-chip release-emotion-chip" data-name="懒惰" onclick="selectReleaseEmotion('懒惰','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">懒惰</div><div class="emotion-chip release-emotion-chip" data-name="再等等吧" onclick="selectReleaseEmotion('再等等吧','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">再等等吧</div><div class="emotion-chip release-emotion-chip" data-name="无精打采" onclick="selectReleaseEmotion('无精打采','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">无精打采</div><div class="emotion-chip release-emotion-chip" data-name="失败者" onclick="selectReleaseEmotion('失败者','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">失败者</div><div class="emotion-chip release-emotion-chip" data-name="失败的" onclick="selectReleaseEmotion('失败的','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">失败的</div><div class="emotion-chip release-emotion-chip" data-name="退缩" onclick="selectReleaseEmotion('退缩','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">退缩</div><div class="emotion-chip release-emotion-chip" data-name="麻木不仁" onclick="selectReleaseEmotion('麻木不仁','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">麻木不仁</div><div class="emotion-chip release-emotion-chip" data-name="击溃" onclick="selectReleaseEmotion('击溃','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">击溃</div><div class="emotion-chip release-emotion-chip" data-name="无能" onclick="selectReleaseEmotion('无能','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">无能</div><div class="emotion-chip release-emotion-chip" data-name="认命" onclick="selectReleaseEmotion('认命','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">认命</div><div class="emotion-chip release-emotion-chip" data-name="宿命" onclick="selectReleaseEmotion('宿命','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">宿命</div><div class="emotion-chip release-emotion-chip" data-name="孤苦" onclick="selectReleaseEmotion('孤苦','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">孤苦</div><div class="emotion-chip release-emotion-chip" data-name="魂不守舍" onclick="selectReleaseEmotion('魂不守舍','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">魂不守舍</div><div class="emotion-chip release-emotion-chip" data-name="神志恍惚" onclick="selectReleaseEmotion('神志恍惚','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">神志恍惚</div><div class="emotion-chip release-emotion-chip" data-name="停滞不前" onclick="selectReleaseEmotion('停滞不前','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">停滞不前</div><div class="emotion-chip release-emotion-chip" data-name="太惨" onclick="selectReleaseEmotion('太惨','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">太惨</div><div class="emotion-chip release-emotion-chip" data-name="冷酷无情" onclick="selectReleaseEmotion('冷酷无情','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">冷酷无情</div><div class="emotion-chip release-emotion-chip" data-name="漫无目的" onclick="selectReleaseEmotion('漫无目的','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">漫无目的</div><div class="emotion-chip release-emotion-chip" data-name="没用" onclick="selectReleaseEmotion('没用','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">没用</div><div class="emotion-chip release-emotion-chip" data-name="模糊不清" onclick="selectReleaseEmotion('模糊不清','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">模糊不清</div><div class="emotion-chip release-emotion-chip" data-name="成虫" onclick="selectReleaseEmotion('成虫','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">成虫</div><div class="emotion-chip release-emotion-chip" data-name="有什么用呢" onclick="selectReleaseEmotion('有什么用呢','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">有什么用呢</div><div class="emotion-chip release-emotion-chip" data-name="为什么要活呢" onclick="selectReleaseEmotion('为什么要活呢','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">为什么要活呢</div><div class="emotion-chip release-emotion-chip" data-name="不值得" onclick="selectReleaseEmotion('不值得','万念俱灰','apathy')" style="font-size:12px;padding:6px 8px;">不值得</div><div class="emotion-chip release-emotion-chip" data-name="被遗弃" onclick="selectReleaseEmotion('被遗弃','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被遗弃</div><div class="emotion-chip release-emotion-chip" data-name="被羞辱" onclick="selectReleaseEmotion('被羞辱','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被羞辱</div><div class="emotion-chip release-emotion-chip" data-name="被控告" onclick="selectReleaseEmotion('被控告','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被控告</div><div class="emotion-chip release-emotion-chip" data-name="被控诉苦" onclick="selectReleaseEmotion('被控诉苦','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被控诉苦</div><div class="emotion-chip release-emotion-chip" data-name="丢脸" onclick="selectReleaseEmotion('丢脸','悲苦','grief')" style="font-size:12px;padding:6px 8px;">丢脸</div><div class="emotion-chip release-emotion-chip" data-name="被背叛" onclick="selectReleaseEmotion('被背叛','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被背叛</div><div class="emotion-chip release-emotion-chip" data-name="忧郁" onclick="selectReleaseEmotion('忧郁','悲苦','grief')" style="font-size:12px;padding:6px 8px;">忧郁</div><div class="emotion-chip release-emotion-chip" data-name="被欺骗" onclick="selectReleaseEmotion('被欺骗','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被欺骗</div><div class="emotion-chip release-emotion-chip" data-name="绝望" onclick="selectReleaseEmotion('绝望','悲苦','grief')" style="font-size:12px;padding:6px 8px;">绝望</div><div class="emotion-chip release-emotion-chip" data-name="失望" onclick="selectReleaseEmotion('失望','悲苦','grief')" style="font-size:12px;padding:6px 8px;">失望</div><div class="emotion-chip release-emotion-chip" data-name="心烦意乱" onclick="selectReleaseEmotion('心烦意乱','悲苦','grief')" style="font-size:12px;padding:6px 8px;">心烦意乱</div><div class="emotion-chip release-emotion-chip" data-name="尴尬的" onclick="selectReleaseEmotion('尴尬的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">尴尬的</div><div class="emotion-chip release-emotion-chip" data-name="被忘掉" onclick="selectReleaseEmotion('被忘掉','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被忘掉</div><div class="emotion-chip release-emotion-chip" data-name="愧疚的" onclick="selectReleaseEmotion('愧疚的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">愧疚的</div><div class="emotion-chip release-emotion-chip" data-name="无望的" onclick="selectReleaseEmotion('无望的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">无望的</div><div class="emotion-chip release-emotion-chip" data-name="头痛" onclick="selectReleaseEmotion('头痛','悲苦','grief')" style="font-size:12px;padding:6px 8px;">头痛</div><div class="emotion-chip release-emotion-chip" data-name="沮丧" onclick="selectReleaseEmotion('沮丧','悲苦','grief')" style="font-size:12px;padding:6px 8px;">沮丧</div><div class="emotion-chip release-emotion-chip" data-name="无助的" onclick="selectReleaseEmotion('无助的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">无助的</div><div class="emotion-chip release-emotion-chip" data-name="受伤" onclick="selectReleaseEmotion('受伤','悲苦','grief')" style="font-size:12px;padding:6px 8px;">受伤</div><div class="emotion-chip release-emotion-chip" data-name="要是就好了" onclick="selectReleaseEmotion('要是就好了','悲苦','grief')" style="font-size:12px;padding:6px 8px;">要是就好了</div><div class="emotion-chip release-emotion-chip" data-name="被忽略的" onclick="selectReleaseEmotion('被忽略的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被忽略的</div><div class="emotion-chip release-emotion-chip" data-name="不够" onclick="selectReleaseEmotion('不够','悲苦','grief')" style="font-size:12px;padding:6px 8px;">不够</div><div class="emotion-chip release-emotion-chip" data-name="伤心欲绝" onclick="selectReleaseEmotion('伤心欲绝','悲苦','grief')" style="font-size:12px;padding:6px 8px;">伤心欲绝</div><div class="emotion-chip release-emotion-chip" data-name="不公平" onclick="selectReleaseEmotion('不公平','悲苦','grief')" style="font-size:12px;padding:6px 8px;">不公平</div><div class="emotion-chip release-emotion-chip" data-name="被遗忘" onclick="selectReleaseEmotion('被遗忘','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被遗忘</div><div class="emotion-chip release-emotion-chip" data-name="极度渴望" onclick="selectReleaseEmotion('极度渴望','悲苦','grief')" style="font-size:12px;padding:6px 8px;">极度渴望</div><div class="emotion-chip release-emotion-chip" data-name="损失" onclick="selectReleaseEmotion('损失','悲苦','grief')" style="font-size:12px;padding:6px 8px;">损失</div><div class="emotion-chip release-emotion-chip" data-name="哀怨" onclick="selectReleaseEmotion('哀怨','悲苦','grief')" style="font-size:12px;padding:6px 8px;">哀怨</div><div class="emotion-chip release-emotion-chip" data-name="被误解" onclick="selectReleaseEmotion('被误解','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被误解</div><div class="emotion-chip release-emotion-chip" data-name="没人关心我" onclick="selectReleaseEmotion('没人关心我','悲苦','grief')" style="font-size:12px;padding:6px 8px;">没人关心我</div><div class="emotion-chip release-emotion-chip" data-name="没人爱我" onclick="selectReleaseEmotion('没人爱我','悲苦','grief')" style="font-size:12px;padding:6px 8px;">没人爱我</div><div class="emotion-chip release-emotion-chip" data-name="乡怨" onclick="selectReleaseEmotion('乡怨','悲苦','grief')" style="font-size:12px;padding:6px 8px;">乡怨</div><div class="emotion-chip release-emotion-chip" data-name="错失" onclick="selectReleaseEmotion('错失','悲苦','grief')" style="font-size:12px;padding:6px 8px;">错失</div><div class="emotion-chip release-emotion-chip" data-name="遗憾" onclick="selectReleaseEmotion('遗憾','悲苦','grief')" style="font-size:12px;padding:6px 8px;">遗憾</div><div class="emotion-chip release-emotion-chip" data-name="可怜的我" onclick="selectReleaseEmotion('可怜的我','悲苦','grief')" style="font-size:12px;padding:6px 8px;">可怜的我</div><div class="emotion-chip release-emotion-chip" data-name="懊悔" onclick="selectReleaseEmotion('懊悔','悲苦','grief')" style="font-size:12px;padding:6px 8px;">懊悔</div><div class="emotion-chip release-emotion-chip" data-name="被剥夺的" onclick="selectReleaseEmotion('被剥夺的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被剥夺的</div><div class="emotion-chip release-emotion-chip" data-name="悲哀" onclick="selectReleaseEmotion('悲哀','悲苦','grief')" style="font-size:12px;padding:6px 8px;">悲哀</div><div class="emotion-chip release-emotion-chip" data-name="悲痛" onclick="selectReleaseEmotion('悲痛','悲苦','grief')" style="font-size:12px;padding:6px 8px;">悲痛</div><div class="emotion-chip release-emotion-chip" data-name="被人落泊的" onclick="selectReleaseEmotion('被人落泊的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被人落泊的</div><div class="emotion-chip release-emotion-chip" data-name="被折磨" onclick="selectReleaseEmotion('被折磨','悲苦','grief')" style="font-size:12px;padding:6px 8px;">被折磨</div><div class="emotion-chip release-emotion-chip" data-name="不被爱" onclick="selectReleaseEmotion('不被爱','悲苦','grief')" style="font-size:12px;padding:6px 8px;">不被爱</div><div class="emotion-chip release-emotion-chip" data-name="不开心" onclick="selectReleaseEmotion('不开心','悲苦','grief')" style="font-size:12px;padding:6px 8px;">不开心</div><div class="emotion-chip release-emotion-chip" data-name="没人要" onclick="selectReleaseEmotion('没人要','悲苦','grief')" style="font-size:12px;padding:6px 8px;">没人要</div><div class="emotion-chip release-emotion-chip" data-name="脆弱" onclick="selectReleaseEmotion('脆弱','悲苦','grief')" style="font-size:12px;padding:6px 8px;">脆弱</div><div class="emotion-chip release-emotion-chip" data-name="为什么是我" onclick="selectReleaseEmotion('为什么是我','悲苦','grief')" style="font-size:12px;padding:6px 8px;">为什么是我</div><div class="emotion-chip release-emotion-chip" data-name="受伤的" onclick="selectReleaseEmotion('受伤的','悲苦','grief')" style="font-size:12px;padding:6px 8px;">受伤的</div><div class="emotion-chip release-emotion-chip" data-name="焦虑" onclick="selectReleaseEmotion('焦虑','恐惧','fear')" style="font-size:12px;padding:6px 8px;">焦虑</div><div class="emotion-chip release-emotion-chip" data-name="不安" onclick="selectReleaseEmotion('不安','恐惧','fear')" style="font-size:12px;padding:6px 8px;">不安</div><div class="emotion-chip release-emotion-chip" data-name="小心谨慎" onclick="selectReleaseEmotion('小心谨慎','恐惧','fear')" style="font-size:12px;padding:6px 8px;">小心谨慎</div><div class="emotion-chip release-emotion-chip" data-name="又冷又疑" onclick="selectReleaseEmotion('又冷又疑','恐惧','fear')" style="font-size:12px;padding:6px 8px;">又冷又疑</div><div class="emotion-chip release-emotion-chip" data-name="胆小怯懦" onclick="selectReleaseEmotion('胆小怯懦','恐惧','fear')" style="font-size:12px;padding:6px 8px;">胆小怯懦</div><div class="emotion-chip release-emotion-chip" data-name="自我防卫" onclick="selectReleaseEmotion('自我防卫','恐惧','fear')" style="font-size:12px;padding:6px 8px;">自我防卫</div><div class="emotion-chip release-emotion-chip" data-name="不信任" onclick="selectReleaseEmotion('不信任','恐惧','fear')" style="font-size:12px;padding:6px 8px;">不信任</div><div class="emotion-chip release-emotion-chip" data-name="怀疑" onclick="selectReleaseEmotion('怀疑','恐惧','fear')" style="font-size:12px;padding:6px 8px;">怀疑</div><div class="emotion-chip release-emotion-chip" data-name="害怕" onclick="selectReleaseEmotion('害怕','恐惧','fear')" style="font-size:12px;padding:6px 8px;">害怕</div><div class="emotion-chip release-emotion-chip" data-name="尴尬的" onclick="selectReleaseEmotion('尴尬的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">尴尬的</div><div class="emotion-chip release-emotion-chip" data-name="逃避的" onclick="selectReleaseEmotion('逃避的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">逃避的</div><div class="emotion-chip release-emotion-chip" data-name="紧张的" onclick="selectReleaseEmotion('紧张的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">紧张的</div><div class="emotion-chip release-emotion-chip" data-name="狂乱的" onclick="selectReleaseEmotion('狂乱的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">狂乱的</div><div class="emotion-chip release-emotion-chip" data-name="犹豫不决" onclick="selectReleaseEmotion('犹豫不决','恐惧','fear')" style="font-size:12px;padding:6px 8px;">犹豫不决</div><div class="emotion-chip release-emotion-chip" data-name="紧张的" onclick="selectReleaseEmotion('紧张的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">紧张的</div><div class="emotion-chip release-emotion-chip" data-name="歇斯底里" onclick="selectReleaseEmotion('歇斯底里','恐惧','fear')" style="font-size:12px;padding:6px 8px;">歇斯底里</div><div class="emotion-chip release-emotion-chip" data-name="拘束的" onclick="selectReleaseEmotion('拘束的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">拘束的</div><div class="emotion-chip release-emotion-chip" data-name="紧张" onclick="selectReleaseEmotion('紧张','恐惧','fear')" style="font-size:12px;padding:6px 8px;">紧张</div><div class="emotion-chip release-emotion-chip" data-name="恐慌" onclick="selectReleaseEmotion('恐慌','恐惧','fear')" style="font-size:12px;padding:6px 8px;">恐慌</div><div class="emotion-chip release-emotion-chip" data-name="紧张" onclick="selectReleaseEmotion('紧张','恐惧','fear')" style="font-size:12px;padding:6px 8px;">紧张</div><div class="emotion-chip release-emotion-chip" data-name="偏执狂" onclick="selectReleaseEmotion('偏执狂','恐惧','fear')" style="font-size:12px;padding:6px 8px;">偏执狂</div><div class="emotion-chip release-emotion-chip" data-name="被吓到的" onclick="selectReleaseEmotion('被吓到的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">被吓到的</div><div class="emotion-chip release-emotion-chip" data-name="偷偷摸摸" onclick="selectReleaseEmotion('偷偷摸摸','恐惧','fear')" style="font-size:12px;padding:6px 8px;">偷偷摸摸</div><div class="emotion-chip release-emotion-chip" data-name="不可靠" onclick="selectReleaseEmotion('不可靠','恐惧','fear')" style="font-size:12px;padding:6px 8px;">不可靠</div><div class="emotion-chip release-emotion-chip" data-name="焦虑" onclick="selectReleaseEmotion('焦虑','恐惧','fear')" style="font-size:12px;padding:6px 8px;">焦虑</div><div class="emotion-chip release-emotion-chip" data-name="怀疑的" onclick="selectReleaseEmotion('怀疑的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">怀疑的</div><div class="emotion-chip release-emotion-chip" data-name="忧郁" onclick="selectReleaseEmotion('忧郁','恐惧','fear')" style="font-size:12px;padding:6px 8px;">忧郁</div><div class="emotion-chip release-emotion-chip" data-name="被吓坏的" onclick="selectReleaseEmotion('被吓坏的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">被吓坏的</div><div class="emotion-chip release-emotion-chip" data-name="多疑的" onclick="selectReleaseEmotion('多疑的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">多疑的</div><div class="emotion-chip release-emotion-chip" data-name="局促生硬" onclick="selectReleaseEmotion('局促生硬','恐惧','fear')" style="font-size:12px;padding:6px 8px;">局促生硬</div><div class="emotion-chip release-emotion-chip" data-name="被吓坏的" onclick="selectReleaseEmotion('被吓坏的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">被吓坏的</div><div class="emotion-chip release-emotion-chip" data-name="被威胁的" onclick="selectReleaseEmotion('被威胁的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">被威胁的</div><div class="emotion-chip release-emotion-chip" data-name="羞怯" onclick="selectReleaseEmotion('羞怯','恐惧','fear')" style="font-size:12px;padding:6px 8px;">羞怯</div><div class="emotion-chip release-emotion-chip" data-name="陷入困境" onclick="selectReleaseEmotion('陷入困境','恐惧','fear')" style="font-size:12px;padding:6px 8px;">陷入困境</div><div class="emotion-chip release-emotion-chip" data-name="迟疑不决" onclick="selectReleaseEmotion('迟疑不决','恐惧','fear')" style="font-size:12px;padding:6px 8px;">迟疑不决</div><div class="emotion-chip release-emotion-chip" data-name="心神不宁" onclick="selectReleaseEmotion('心神不宁','恐惧','fear')" style="font-size:12px;padding:6px 8px;">心神不宁</div><div class="emotion-chip release-emotion-chip" data-name="被恐吓的" onclick="selectReleaseEmotion('被恐吓的','恐惧','fear')" style="font-size:12px;padding:6px 8px;">被恐吓的</div><div class="emotion-chip release-emotion-chip" data-name="想逃" onclick="selectReleaseEmotion('想逃','恐惧','fear')" style="font-size:12px;padding:6px 8px;">想逃</div><div class="emotion-chip release-emotion-chip" data-name="逃避" onclick="selectReleaseEmotion('逃避','恐惧','fear')" style="font-size:12px;padding:6px 8px;">逃避</div><div class="emotion-chip release-emotion-chip" data-name="小心翼翼" onclick="selectReleaseEmotion('小心翼翼','恐惧','fear')" style="font-size:12px;padding:6px 8px;">小心翼翼</div><div class="emotion-chip release-emotion-chip" data-name="担心" onclick="selectReleaseEmotion('担心','恐惧','fear')" style="font-size:12px;padding:6px 8px;">担心</div><div class="emotion-chip release-emotion-chip" data-name="恐惧" onclick="selectReleaseEmotion('恐惧','恐惧','fear')" style="font-size:12px;padding:6px 8px;">恐惧</div><div class="emotion-chip release-emotion-chip" data-name="惊骇" onclick="selectReleaseEmotion('惊骇','恐惧','fear')" style="font-size:12px;padding:6px 8px;">惊骇</div><div class="emotion-chip release-emotion-chip" data-name="放弃" onclick="selectReleaseEmotion('放弃','贪求','desire')" style="font-size:12px;padding:6px 8px;">放弃</div><div class="emotion-chip release-emotion-chip" data-name="预测" onclick="selectReleaseEmotion('预测','贪求','desire')" style="font-size:12px;padding:6px 8px;">预测</div><div class="emotion-chip release-emotion-chip" data-name="冷酷无情" onclick="selectReleaseEmotion('冷酷无情','贪求','desire')" style="font-size:12px;padding:6px 8px;">冷酷无情</div><div class="emotion-chip release-emotion-chip" data-name="等不了" onclick="selectReleaseEmotion('等不了','贪求','desire')" style="font-size:12px;padding:6px 8px;">等不了</div><div class="emotion-chip release-emotion-chip" data-name="冲动" onclick="selectReleaseEmotion('冲动','贪求','desire')" style="font-size:12px;padding:6px 8px;">冲动</div><div class="emotion-chip release-emotion-chip" data-name="渴求" onclick="selectReleaseEmotion('渴求','贪求','desire')" style="font-size:12px;padding:6px 8px;">渴求</div><div class="emotion-chip release-emotion-chip" data-name="渴求的" onclick="selectReleaseEmotion('渴求的','贪求','desire')" style="font-size:12px;padding:6px 8px;">渴求的</div><div class="emotion-chip release-emotion-chip" data-name="被驱使的" onclick="selectReleaseEmotion('被驱使的','贪求','desire')" style="font-size:12px;padding:6px 8px;">被驱使的</div><div class="emotion-chip release-emotion-chip" data-name="轻浮的" onclick="selectReleaseEmotion('轻浮的','贪求','desire')" style="font-size:12px;padding:6px 8px;">轻浮的</div><div class="emotion-chip release-emotion-chip" data-name="操纵的" onclick="selectReleaseEmotion('操纵的','贪求','desire')" style="font-size:12px;padding:6px 8px;">操纵的</div><div class="emotion-chip release-emotion-chip" data-name="嫉妒" onclick="selectReleaseEmotion('嫉妒','贪求','desire')" style="font-size:12px;padding:6px 8px;">嫉妒</div><div class="emotion-chip release-emotion-chip" data-name="剥削" onclick="selectReleaseEmotion('剥削','贪求','desire')" style="font-size:12px;padding:6px 8px;">剥削</div><div class="emotion-chip release-emotion-chip" data-name="过度依恋" onclick="selectReleaseEmotion('过度依恋','贪求','desire')" style="font-size:12px;padding:6px 8px;">过度依恋</div><div class="emotion-chip release-emotion-chip" data-name="贪婪的" onclick="selectReleaseEmotion('贪婪的','贪求','desire')" style="font-size:12px;padding:6px 8px;">贪婪的</div><div class="emotion-chip release-emotion-chip" data-name="失意的" onclick="selectReleaseEmotion('失意的','贪求','desire')" style="font-size:12px;padding:6px 8px;">失意的</div><div class="emotion-chip release-emotion-chip" data-name="贪求" onclick="selectReleaseEmotion('贪求','贪求','desire')" style="font-size:12px;padding:6px 8px;">贪求</div><div class="emotion-chip release-emotion-chip" data-name="囤积" onclick="selectReleaseEmotion('囤积','贪求','desire')" style="font-size:12px;padding:6px 8px;">囤积</div><div class="emotion-chip release-emotion-chip" data-name="饥饿" onclick="selectReleaseEmotion('饥饿','贪求','desire')" style="font-size:12px;padding:6px 8px;">饥饿</div><div class="emotion-chip release-emotion-chip" data-name="我想" onclick="selectReleaseEmotion('我想','贪求','desire')" style="font-size:12px;padding:6px 8px;">我想</div><div class="emotion-chip release-emotion-chip" data-name="不耐烦" onclick="selectReleaseEmotion('不耐烦','贪求','desire')" style="font-size:12px;padding:6px 8px;">不耐烦</div><div class="emotion-chip release-emotion-chip" data-name="好色的" onclick="selectReleaseEmotion('好色的','贪求','desire')" style="font-size:12px;padding:6px 8px;">好色的</div><div class="emotion-chip release-emotion-chip" data-name="浮荡的" onclick="selectReleaseEmotion('浮荡的','贪求','desire')" style="font-size:12px;padding:6px 8px;">浮荡的</div><div class="emotion-chip release-emotion-chip" data-name="操纵别人" onclick="selectReleaseEmotion('操纵别人','贪求','desire')" style="font-size:12px;padding:6px 8px;">操纵别人</div><div class="emotion-chip release-emotion-chip" data-name="幸运的" onclick="selectReleaseEmotion('幸运的','贪求','desire')" style="font-size:12px;padding:6px 8px;">幸运的</div><div class="emotion-chip release-emotion-chip" data-name="一定要得到" onclick="selectReleaseEmotion('一定要得到','贪求','desire')" style="font-size:12px;padding:6px 8px;">一定要得到</div><div class="emotion-chip release-emotion-chip" data-name="从来不满足" onclick="selectReleaseEmotion('从来不满足','贪求','desire')" style="font-size:12px;padding:6px 8px;">从来不满足</div><div class="emotion-chip release-emotion-chip" data-name="永不满足" onclick="selectReleaseEmotion('永不满足','贪求','desire')" style="font-size:12px;padding:6px 8px;">永不满足</div><div class="emotion-chip release-emotion-chip" data-name="没意识的" onclick="selectReleaseEmotion('没意识的','贪求','desire')" style="font-size:12px;padding:6px 8px;">没意识的</div><div class="emotion-chip release-emotion-chip" data-name="着迷的" onclick="selectReleaseEmotion('着迷的','贪求','desire')" style="font-size:12px;padding:6px 8px;">着迷的</div><div class="emotion-chip release-emotion-chip" data-name="渴望强盛的" onclick="selectReleaseEmotion('渴望强盛的','贪求','desire')" style="font-size:12px;padding:6px 8px;">渴望强盛的</div><div class="emotion-chip release-emotion-chip" data-name="固执己见" onclick="selectReleaseEmotion('固执己见','贪求','desire')" style="font-size:12px;padding:6px 8px;">固执己见</div><div class="emotion-chip release-emotion-chip" data-name="鲁莽" onclick="selectReleaseEmotion('鲁莽','贪求','desire')" style="font-size:12px;padding:6px 8px;">鲁莽</div><div class="emotion-chip release-emotion-chip" data-name="残忍的" onclick="selectReleaseEmotion('残忍的','贪求','desire')" style="font-size:12px;padding:6px 8px;">残忍的</div><div class="emotion-chip release-emotion-chip" data-name="算计吞噬" onclick="selectReleaseEmotion('算计吞噬','贪求','desire')" style="font-size:12px;padding:6px 8px;">算计吞噬</div><div class="emotion-chip release-emotion-chip" data-name="自私的" onclick="selectReleaseEmotion('自私的','贪求','desire')" style="font-size:12px;padding:6px 8px;">自私的</div><div class="emotion-chip release-emotion-chip" data-name="如饥似渴" onclick="selectReleaseEmotion('如饥似渴','贪求','desire')" style="font-size:12px;padding:6px 8px;">如饥似渴</div><div class="emotion-chip release-emotion-chip" data-name="战壕" onclick="selectReleaseEmotion('战壕','贪求','desire')" style="font-size:12px;padding:6px 8px;">战壕</div><div class="emotion-chip release-emotion-chip" data-name="伤人感情的" onclick="selectReleaseEmotion('伤人感情的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">伤人感情的</div><div class="emotion-chip release-emotion-chip" data-name="好斗的" onclick="selectReleaseEmotion('好斗的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">好斗的</div><div class="emotion-chip release-emotion-chip" data-name="挑衅的" onclick="selectReleaseEmotion('挑衅的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">挑衅的</div><div class="emotion-chip release-emotion-chip" data-name="好辩的" onclick="selectReleaseEmotion('好辩的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">好辩的</div><div class="emotion-chip release-emotion-chip" data-name="好战的" onclick="selectReleaseEmotion('好战的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">好战的</div><div class="emotion-chip release-emotion-chip" data-name="激烈" onclick="selectReleaseEmotion('激烈','愤怒','anger')" style="font-size:12px;padding:6px 8px;">激烈</div><div class="emotion-chip release-emotion-chip" data-name="令人愤慨的" onclick="selectReleaseEmotion('令人愤慨的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">令人愤慨的</div><div class="emotion-chip release-emotion-chip" data-name="刻薄的" onclick="selectReleaseEmotion('刻薄的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">刻薄的</div><div class="emotion-chip release-emotion-chip" data-name="挑衅的" onclick="selectReleaseEmotion('挑衅的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">挑衅的</div><div class="emotion-chip release-emotion-chip" data-name="苛求的" onclick="selectReleaseEmotion('苛求的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">苛求的</div><div class="emotion-chip release-emotion-chip" data-name="毁灭性的" onclick="selectReleaseEmotion('毁灭性的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">毁灭性的</div><div class="emotion-chip release-emotion-chip" data-name="嫉妒的" onclick="selectReleaseEmotion('嫉妒的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">嫉妒的</div><div class="emotion-chip release-emotion-chip" data-name="脾气暴躁" onclick="selectReleaseEmotion('脾气暴躁','愤怒','anger')" style="font-size:12px;padding:6px 8px;">脾气暴躁</div><div class="emotion-chip release-emotion-chip" data-name="凶猛的" onclick="selectReleaseEmotion('凶猛的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">凶猛的</div><div class="emotion-chip release-emotion-chip" data-name="讽刺的" onclick="selectReleaseEmotion('讽刺的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">讽刺的</div><div class="emotion-chip release-emotion-chip" data-name="气愤" onclick="selectReleaseEmotion('气愤','愤怒','anger')" style="font-size:12px;padding:6px 8px;">气愤</div><div class="emotion-chip release-emotion-chip" data-name="愤慨" onclick="selectReleaseEmotion('愤慨','愤怒','anger')" style="font-size:12px;padding:6px 8px;">愤慨</div><div class="emotion-chip release-emotion-chip" data-name="狂怒的" onclick="selectReleaseEmotion('狂怒的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">狂怒的</div><div class="emotion-chip release-emotion-chip" data-name="严厉" onclick="selectReleaseEmotion('严厉','愤怒','anger')" style="font-size:12px;padding:6px 8px;">严厉</div><div class="emotion-chip release-emotion-chip" data-name="憎恨" onclick="selectReleaseEmotion('憎恨','愤怒','anger')" style="font-size:12px;padding:6px 8px;">憎恨</div><div class="emotion-chip release-emotion-chip" data-name="敌意" onclick="selectReleaseEmotion('敌意','愤怒','anger')" style="font-size:12px;padding:6px 8px;">敌意</div><div class="emotion-chip release-emotion-chip" data-name="不耐烦" onclick="selectReleaseEmotion('不耐烦','愤怒','anger')" style="font-size:12px;padding:6px 8px;">不耐烦</div><div class="emotion-chip release-emotion-chip" data-name="愤愤不平" onclick="selectReleaseEmotion('愤愤不平','愤怒','anger')" style="font-size:12px;padding:6px 8px;">愤愤不平</div><div class="emotion-chip release-emotion-chip" data-name="生气" onclick="selectReleaseEmotion('生气','愤怒','anger')" style="font-size:12px;padding:6px 8px;">生气</div><div class="emotion-chip release-emotion-chip" data-name="舒适" onclick="selectReleaseEmotion('舒适','愤怒','anger')" style="font-size:12px;padding:6px 8px;">舒适</div><div class="emotion-chip release-emotion-chip" data-name="怒气冲冲" onclick="selectReleaseEmotion('怒气冲冲','愤怒','anger')" style="font-size:12px;padding:6px 8px;">怒气冲冲</div><div class="emotion-chip release-emotion-chip" data-name="疯狂" onclick="selectReleaseEmotion('疯狂','愤怒','anger')" style="font-size:12px;padding:6px 8px;">疯狂</div><div class="emotion-chip release-emotion-chip" data-name="卑鄙" onclick="selectReleaseEmotion('卑鄙','愤怒','anger')" style="font-size:12px;padding:6px 8px;">卑鄙</div><div class="emotion-chip release-emotion-chip" data-name="残忍" onclick="selectReleaseEmotion('残忍','愤怒','anger')" style="font-size:12px;padding:6px 8px;">残忍</div><div class="emotion-chip release-emotion-chip" data-name="凶残的" onclick="selectReleaseEmotion('凶残的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">凶残的</div><div class="emotion-chip release-emotion-chip" data-name="又愤世嫉俗" onclick="selectReleaseEmotion('又愤世嫉俗','愤怒','anger')" style="font-size:12px;padding:6px 8px;">又愤世嫉俗</div><div class="emotion-chip release-emotion-chip" data-name="偏执的" onclick="selectReleaseEmotion('偏执的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">偏执的</div><div class="emotion-chip release-emotion-chip" data-name="坏脾气" onclick="selectReleaseEmotion('坏脾气','愤怒','anger')" style="font-size:12px;padding:6px 8px;">坏脾气</div><div class="emotion-chip release-emotion-chip" data-name="报复的" onclick="selectReleaseEmotion('报复的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">报复的</div><div class="emotion-chip release-emotion-chip" data-name="粗鲁" onclick="selectReleaseEmotion('粗鲁','愤怒','anger')" style="font-size:12px;padding:6px 8px;">粗鲁</div><div class="emotion-chip release-emotion-chip" data-name="怨恨" onclick="selectReleaseEmotion('怨恨','愤怒','anger')" style="font-size:12px;padding:6px 8px;">怨恨</div><div class="emotion-chip release-emotion-chip" data-name="自私" onclick="selectReleaseEmotion('自私','愤怒','anger')" style="font-size:12px;padding:6px 8px;">自私</div><div class="emotion-chip release-emotion-chip" data-name="粗鲁" onclick="selectReleaseEmotion('粗鲁','愤怒','anger')" style="font-size:12px;padding:6px 8px;">粗鲁</div><div class="emotion-chip release-emotion-chip" data-name="野蛮" onclick="selectReleaseEmotion('野蛮','愤怒','anger')" style="font-size:12px;padding:6px 8px;">野蛮</div><div class="emotion-chip release-emotion-chip" data-name="冲突激化" onclick="selectReleaseEmotion('冲突激化','愤怒','anger')" style="font-size:12px;padding:6px 8px;">冲突激化</div><div class="emotion-chip release-emotion-chip" data-name="怒气冲天" onclick="selectReleaseEmotion('怒气冲天','愤怒','anger')" style="font-size:12px;padding:6px 8px;">怒气冲天</div><div class="emotion-chip release-emotion-chip" data-name="五内俱焚" onclick="selectReleaseEmotion('五内俱焚','愤怒','anger')" style="font-size:12px;padding:6px 8px;">五内俱焚</div><div class="emotion-chip release-emotion-chip" data-name="怀恨在心" onclick="selectReleaseEmotion('怀恨在心','愤怒','anger')" style="font-size:12px;padding:6px 8px;">怀恨在心</div><div class="emotion-chip release-emotion-chip" data-name="钢铁般的" onclick="selectReleaseEmotion('钢铁般的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">钢铁般的</div><div class="emotion-chip release-emotion-chip" data-name="有意" onclick="selectReleaseEmotion('有意','愤怒','anger')" style="font-size:12px;padding:6px 8px;">有意</div><div class="emotion-chip release-emotion-chip" data-name="倔强" onclick="selectReleaseEmotion('倔强','愤怒','anger')" style="font-size:12px;padding:6px 8px;">倔强</div><div class="emotion-chip release-emotion-chip" data-name="偏执" onclick="selectReleaseEmotion('偏执','愤怒','anger')" style="font-size:12px;padding:6px 8px;">偏执</div><div class="emotion-chip release-emotion-chip" data-name="复仇心切" onclick="selectReleaseEmotion('复仇心切','愤怒','anger')" style="font-size:12px;padding:6px 8px;">复仇心切</div><div class="emotion-chip release-emotion-chip" data-name="恶毒" onclick="selectReleaseEmotion('恶毒','愤怒','anger')" style="font-size:12px;padding:6px 8px;">恶毒</div><div class="emotion-chip release-emotion-chip" data-name="暴力" onclick="selectReleaseEmotion('暴力','愤怒','anger')" style="font-size:12px;padding:6px 8px;">暴力</div><div class="emotion-chip release-emotion-chip" data-name="易爆发的" onclick="selectReleaseEmotion('易爆发的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">易爆发的</div><div class="emotion-chip release-emotion-chip" data-name="意志薄弱" onclick="selectReleaseEmotion('意志薄弱','愤怒','anger')" style="font-size:12px;padding:6px 8px;">意志薄弱</div><div class="emotion-chip release-emotion-chip" data-name="任性的" onclick="selectReleaseEmotion('任性的','愤怒','anger')" style="font-size:12px;padding:6px 8px;">任性的</div><div class="emotion-chip release-emotion-chip" data-name="无家可寻" onclick="selectReleaseEmotion('无家可寻','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">无家可寻</div><div class="emotion-chip release-emotion-chip" data-name="超然离群" onclick="selectReleaseEmotion('超然离群','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">超然离群</div><div class="emotion-chip release-emotion-chip" data-name="自恋" onclick="selectReleaseEmotion('自恋','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自恋</div><div class="emotion-chip release-emotion-chip" data-name="固执己见" onclick="selectReleaseEmotion('固执己见','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">固执己见</div><div class="emotion-chip release-emotion-chip" data-name="无聊" onclick="selectReleaseEmotion('无聊','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">无聊</div><div class="emotion-chip release-emotion-chip" data-name="聪明" onclick="selectReleaseEmotion('聪明','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">聪明</div><div class="emotion-chip release-emotion-chip" data-name="封闭的" onclick="selectReleaseEmotion('封闭的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">封闭的</div><div class="emotion-chip release-emotion-chip" data-name="沾沾自喜" onclick="selectReleaseEmotion('沾沾自喜','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">沾沾自喜</div><div class="emotion-chip release-emotion-chip" data-name="思路清晰" onclick="selectReleaseEmotion('思路清晰','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">思路清晰</div><div class="emotion-chip release-emotion-chip" data-name="轻蔑的" onclick="selectReleaseEmotion('轻蔑的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">轻蔑的</div><div class="emotion-chip release-emotion-chip" data-name="酷" onclick="selectReleaseEmotion('酷','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">酷</div><div class="emotion-chip release-emotion-chip" data-name="自信的" onclick="selectReleaseEmotion('自信的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自信的</div><div class="emotion-chip release-emotion-chip" data-name="鄙弃" onclick="selectReleaseEmotion('鄙弃','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">鄙弃</div><div class="emotion-chip release-emotion-chip" data-name="傲慢专断" onclick="selectReleaseEmotion('傲慢专断','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">傲慢专断</div><div class="emotion-chip release-emotion-chip" data-name="批判的" onclick="selectReleaseEmotion('批判的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">批判的</div><div class="emotion-chip release-emotion-chip" data-name="虚度美德" onclick="selectReleaseEmotion('虚度美德','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">虚度美德</div><div class="emotion-chip release-emotion-chip" data-name="扬扬得意" onclick="selectReleaseEmotion('扬扬得意','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">扬扬得意</div><div class="emotion-chip release-emotion-chip" data-name="自以为是" onclick="selectReleaseEmotion('自以为是','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自以为是</div><div class="emotion-chip release-emotion-chip" data-name="自以为是" onclick="selectReleaseEmotion('自以为是','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自以为是</div><div class="emotion-chip release-emotion-chip" data-name="成功" onclick="selectReleaseEmotion('成功','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">成功</div><div class="emotion-chip release-emotion-chip" data-name="不悦地" onclick="selectReleaseEmotion('不悦地','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">不悦地</div><div class="emotion-chip release-emotion-chip" data-name="批量的" onclick="selectReleaseEmotion('批量的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">批量的</div><div class="emotion-chip release-emotion-chip" data-name="批判性的" onclick="selectReleaseEmotion('批判性的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">批判性的</div><div class="emotion-chip release-emotion-chip" data-name="自命无所不知的" onclick="selectReleaseEmotion('自命无所不知的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自命无所不知的</div><div class="emotion-chip release-emotion-chip" data-name="心胸狭隘" onclick="selectReleaseEmotion('心胸狭隘','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">心胸狭隘</div><div class="emotion-chip release-emotion-chip" data-name="永远无法不错" onclick="selectReleaseEmotion('永远无法不错','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">永远无法不错</div><div class="emotion-chip release-emotion-chip" data-name="武断" onclick="selectReleaseEmotion('武断','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">武断</div><div class="emotion-chip release-emotion-chip" data-name="盛气凌人" onclick="selectReleaseEmotion('盛气凌人','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">盛气凌人</div><div class="emotion-chip release-emotion-chip" data-name="神气十足" onclick="selectReleaseEmotion('神气十足','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">神气十足</div><div class="emotion-chip release-emotion-chip" data-name="偏颇的" onclick="selectReleaseEmotion('偏颇的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">偏颇的</div><div class="emotion-chip release-emotion-chip" data-name="成见" onclick="selectReleaseEmotion('成见','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">成见</div><div class="emotion-chip release-emotion-chip" data-name="自以为是公正的" onclick="selectReleaseEmotion('自以为是公正的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自以为是公正的</div><div class="emotion-chip release-emotion-chip" data-name="愤世不忌" onclick="selectReleaseEmotion('愤世不忌','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">愤世不忌</div><div class="emotion-chip release-emotion-chip" data-name="自恋的" onclick="selectReleaseEmotion('自恋的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自恋的</div><div class="emotion-chip release-emotion-chip" data-name="自鸣得意" onclick="selectReleaseEmotion('自鸣得意','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自鸣得意</div><div class="emotion-chip release-emotion-chip" data-name="自私" onclick="selectReleaseEmotion('自私','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自私</div><div class="emotion-chip release-emotion-chip" data-name="自命不凡" onclick="selectReleaseEmotion('自命不凡','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自命不凡</div><div class="emotion-chip release-emotion-chip" data-name="势利眼" onclick="selectReleaseEmotion('势利眼','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">势利眼</div><div class="emotion-chip release-emotion-chip" data-name="独特" onclick="selectReleaseEmotion('独特','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">独特</div><div class="emotion-chip release-emotion-chip" data-name="被宠坏的" onclick="selectReleaseEmotion('被宠坏的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">被宠坏的</div><div class="emotion-chip release-emotion-chip" data-name="禁欲主义" onclick="selectReleaseEmotion('禁欲主义','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">禁欲主义</div><div class="emotion-chip release-emotion-chip" data-name="顽固不化" onclick="selectReleaseEmotion('顽固不化','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">顽固不化</div><div class="emotion-chip release-emotion-chip" data-name="自高自大" onclick="selectReleaseEmotion('自高自大','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">自高自大</div><div class="emotion-chip release-emotion-chip" data-name="优越感" onclick="selectReleaseEmotion('优越感','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">优越感</div><div class="emotion-chip release-emotion-chip" data-name="强硬不妥协" onclick="selectReleaseEmotion('强硬不妥协','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">强硬不妥协</div><div class="emotion-chip release-emotion-chip" data-name="无感觉的" onclick="selectReleaseEmotion('无感觉的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">无感觉的</div><div class="emotion-chip release-emotion-chip" data-name="不受影响的" onclick="selectReleaseEmotion('不受影响的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">不受影响的</div><div class="emotion-chip release-emotion-chip" data-name="不屈服的" onclick="selectReleaseEmotion('不屈服的','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">不屈服的</div><div class="emotion-chip release-emotion-chip" data-name="爱慕虚荣" onclick="selectReleaseEmotion('爱慕虚荣','自尊自傲','pride')" style="font-size:12px;padding:6px 8px;">爱慕虚荣</div><div class="emotion-chip release-emotion-chip" data-name="喜欢冒险的" onclick="selectReleaseEmotion('喜欢冒险的','无畏','courage')" style="font-size:12px;padding:6px 8px;">喜欢冒险的</div><div class="emotion-chip release-emotion-chip" data-name="警惕的" onclick="selectReleaseEmotion('警惕的','无畏','courage')" style="font-size:12px;padding:6px 8px;">警惕的</div><div class="emotion-chip release-emotion-chip" data-name="自由的" onclick="selectReleaseEmotion('自由的','无畏','courage')" style="font-size:12px;padding:6px 8px;">自由的</div><div class="emotion-chip release-emotion-chip" data-name="胸有成竹的" onclick="selectReleaseEmotion('胸有成竹的','无畏','courage')" style="font-size:12px;padding:6px 8px;">胸有成竹的</div><div class="emotion-chip release-emotion-chip" data-name="机警的" onclick="selectReleaseEmotion('机警的','无畏','courage')" style="font-size:12px;padding:6px 8px;">机警的</div><div class="emotion-chip release-emotion-chip" data-name="有中心的" onclick="selectReleaseEmotion('有中心的','无畏','courage')" style="font-size:12px;padding:6px 8px;">有中心的</div><div class="emotion-chip release-emotion-chip" data-name="有把握的" onclick="selectReleaseEmotion('有把握的','无畏','courage')" style="font-size:12px;padding:6px 8px;">有把握的</div><div class="emotion-chip release-emotion-chip" data-name="愉快" onclick="selectReleaseEmotion('愉快','无畏','courage')" style="font-size:12px;padding:6px 8px;">愉快</div><div class="emotion-chip release-emotion-chip" data-name="思路清晰" onclick="selectReleaseEmotion('思路清晰','无畏','courage')" style="font-size:12px;padding:6px 8px;">思路清晰</div><div class="emotion-chip release-emotion-chip" data-name="怜悯" onclick="selectReleaseEmotion('怜悯','无畏','courage')" style="font-size:12px;padding:6px 8px;">怜悯</div><div class="emotion-chip release-emotion-chip" data-name="能干的" onclick="selectReleaseEmotion('能干的','无畏','courage')" style="font-size:12px;padding:6px 8px;">能干的</div><div class="emotion-chip release-emotion-chip" data-name="自信的" onclick="selectReleaseEmotion('自信的','无畏','courage')" style="font-size:12px;padding:6px 8px;">自信的</div><div class="emotion-chip release-emotion-chip" data-name="创新的" onclick="selectReleaseEmotion('创新的','无畏','courage')" style="font-size:12px;padding:6px 8px;">创新的</div><div class="emotion-chip release-emotion-chip" data-name="大胆" onclick="selectReleaseEmotion('大胆','无畏','courage')" style="font-size:12px;padding:6px 8px;">大胆</div><div class="emotion-chip release-emotion-chip" data-name="果断的" onclick="selectReleaseEmotion('果断的','无畏','courage')" style="font-size:12px;padding:6px 8px;">果断的</div><div class="emotion-chip release-emotion-chip" data-name="有活力" onclick="selectReleaseEmotion('有活力','无畏','courage')" style="font-size:12px;padding:6px 8px;">有活力</div><div class="emotion-chip release-emotion-chip" data-name="热心的" onclick="selectReleaseEmotion('热心的','无畏','courage')" style="font-size:12px;padding:6px 8px;">热心的</div><div class="emotion-chip release-emotion-chip" data-name="热情" onclick="selectReleaseEmotion('热情','无畏','courage')" style="font-size:12px;padding:6px 8px;">热情</div><div class="emotion-chip release-emotion-chip" data-name="自以为是" onclick="selectReleaseEmotion('自以为是','无畏','courage')" style="font-size:12px;padding:6px 8px;">自以为是</div><div class="emotion-chip release-emotion-chip" data-name="成功" onclick="selectReleaseEmotion('成功','无畏','courage')" style="font-size:12px;padding:6px 8px;">成功</div><div class="emotion-chip release-emotion-chip" data-name="探索" onclick="selectReleaseEmotion('探索','无畏','courage')" style="font-size:12px;padding:6px 8px;">探索</div><div class="emotion-chip release-emotion-chip" data-name="灵活的" onclick="selectReleaseEmotion('灵活的','无畏','courage')" style="font-size:12px;padding:6px 8px;">灵活的</div><div class="emotion-chip release-emotion-chip" data-name="专注的" onclick="selectReleaseEmotion('专注的','无畏','courage')" style="font-size:12px;padding:6px 8px;">专注的</div><div class="emotion-chip release-emotion-chip" data-name="乐善好施" onclick="selectReleaseEmotion('乐善好施','无畏','courage')" style="font-size:12px;padding:6px 8px;">乐善好施</div><div class="emotion-chip release-emotion-chip" data-name="开心" onclick="selectReleaseEmotion('开心','无畏','courage')" style="font-size:12px;padding:6px 8px;">开心</div><div class="emotion-chip release-emotion-chip" data-name="可敬的" onclick="selectReleaseEmotion('可敬的','无畏','courage')" style="font-size:12px;padding:6px 8px;">可敬的</div><div class="emotion-chip release-emotion-chip" data-name="幽默" onclick="selectReleaseEmotion('幽默','无畏','courage')" style="font-size:12px;padding:6px 8px;">幽默</div><div class="emotion-chip release-emotion-chip" data-name="独立的" onclick="selectReleaseEmotion('独立的','无畏','courage')" style="font-size:12px;padding:6px 8px;">独立的</div><div class="emotion-chip release-emotion-chip" data-name="首创精神" onclick="selectReleaseEmotion('首创精神','无畏','courage')" style="font-size:12px;padding:6px 8px;">首创精神</div><div class="emotion-chip release-emotion-chip" data-name="直觉" onclick="selectReleaseEmotion('直觉','无畏','courage')" style="font-size:12px;padding:6px 8px;">直觉</div><div class="emotion-chip release-emotion-chip" data-name="所向披靡" onclick="selectReleaseEmotion('所向披靡','无畏','courage')" style="font-size:12px;padding:6px 8px;">所向披靡</div><div class="emotion-chip release-emotion-chip" data-name="有爱的" onclick="selectReleaseEmotion('有爱的','无畏','courage')" style="font-size:12px;padding:6px 8px;">有爱的</div><div class="emotion-chip release-emotion-chip" data-name="头脑清楚" onclick="selectReleaseEmotion('头脑清楚','无畏','courage')" style="font-size:12px;padding:6px 8px;">头脑清楚</div><div class="emotion-chip release-emotion-chip" data-name="自强不息" onclick="selectReleaseEmotion('自强不息','无畏','courage')" style="font-size:12px;padding:6px 8px;">自强不息</div><div class="emotion-chip release-emotion-chip" data-name="来者不拒" onclick="selectReleaseEmotion('来者不拒','无畏','courage')" style="font-size:12px;padding:6px 8px;">来者不拒</div><div class="emotion-chip release-emotion-chip" data-name="开放" onclick="selectReleaseEmotion('开放','无畏','courage')" style="font-size:12px;padding:6px 8px;">开放</div><div class="emotion-chip release-emotion-chip" data-name="乐观" onclick="selectReleaseEmotion('乐观','无畏','courage')" style="font-size:12px;padding:6px 8px;">乐观</div><div class="emotion-chip release-emotion-chip" data-name="洞察力" onclick="selectReleaseEmotion('洞察力','无畏','courage')" style="font-size:12px;padding:6px 8px;">洞察力</div><div class="emotion-chip release-emotion-chip" data-name="积极" onclick="selectReleaseEmotion('积极','无畏','courage')" style="font-size:12px;padding:6px 8px;">积极</div><div class="emotion-chip release-emotion-chip" data-name="意志坚强" onclick="selectReleaseEmotion('意志坚强','无畏','courage')" style="font-size:12px;padding:6px 8px;">意志坚强</div><div class="emotion-chip release-emotion-chip" data-name="敏感的" onclick="selectReleaseEmotion('敏感的','无畏','courage')" style="font-size:12px;padding:6px 8px;">敏感的</div><div class="emotion-chip release-emotion-chip" data-name="坚强的" onclick="selectReleaseEmotion('坚强的','无畏','courage')" style="font-size:12px;padding:6px 8px;">坚强的</div><div class="emotion-chip release-emotion-chip" data-name="自给自足" onclick="selectReleaseEmotion('自给自足','无畏','courage')" style="font-size:12px;padding:6px 8px;">自给自足</div><div class="emotion-chip release-emotion-chip" data-name="犀利的" onclick="selectReleaseEmotion('犀利的','无畏','courage')" style="font-size:12px;padding:6px 8px;">犀利的</div><div class="emotion-chip release-emotion-chip" data-name="坚定的" onclick="selectReleaseEmotion('坚定的','无畏','courage')" style="font-size:12px;padding:6px 8px;">坚定的</div><div class="emotion-chip release-emotion-chip" data-name="助人为乐" onclick="selectReleaseEmotion('助人为乐','无畏','courage')" style="font-size:12px;padding:6px 8px;">助人为乐</div><div class="emotion-chip release-emotion-chip" data-name="不知疲惫" onclick="selectReleaseEmotion('不知疲惫','无畏','courage')" style="font-size:12px;padding:6px 8px;">不知疲惫</div><div class="emotion-chip release-emotion-chip" data-name="精力充沛" onclick="selectReleaseEmotion('精力充沛','无畏','courage')" style="font-size:12px;padding:6px 8px;">精力充沛</div><div class="emotion-chip release-emotion-chip" data-name="乐意" onclick="selectReleaseEmotion('乐意','无畏','courage')" style="font-size:12px;padding:6px 8px;">乐意</div><div class="emotion-chip release-emotion-chip" data-name="热忱" onclick="selectReleaseEmotion('热忱','无畏','courage')" style="font-size:12px;padding:6px 8px;">热忱</div><div class="emotion-chip release-emotion-chip" data-name="丰盛" onclick="selectReleaseEmotion('丰盛','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">丰盛</div><div class="emotion-chip release-emotion-chip" data-name="有能力的" onclick="selectReleaseEmotion('有能力的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">有能力的</div><div class="emotion-chip release-emotion-chip" data-name="自豪" onclick="selectReleaseEmotion('自豪','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">自豪</div><div class="emotion-chip release-emotion-chip" data-name="平衡" onclick="selectReleaseEmotion('平衡','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">平衡</div><div class="emotion-chip release-emotion-chip" data-name="归属感" onclick="selectReleaseEmotion('归属感','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">归属感</div><div class="emotion-chip release-emotion-chip" data-name="天生灵魂" onclick="selectReleaseEmotion('天生灵魂','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">天生灵魂</div><div class="emotion-chip release-emotion-chip" data-name="同情心" onclick="selectReleaseEmotion('同情心','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">同情心</div><div class="emotion-chip release-emotion-chip" data-name="体贴的" onclick="selectReleaseEmotion('体贴的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">体贴的</div><div class="emotion-chip release-emotion-chip" data-name="高兴" onclick="selectReleaseEmotion('高兴','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">高兴</div><div class="emotion-chip release-emotion-chip" data-name="兴高采烈" onclick="selectReleaseEmotion('兴高采烈','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">兴高采烈</div><div class="emotion-chip release-emotion-chip" data-name="拥抱" onclick="selectReleaseEmotion('拥抱','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">拥抱</div><div class="emotion-chip release-emotion-chip" data-name="善解人意" onclick="selectReleaseEmotion('善解人意','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">善解人意</div><div class="emotion-chip release-emotion-chip" data-name="丰富" onclick="selectReleaseEmotion('丰富','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">丰富</div><div class="emotion-chip release-emotion-chip" data-name="一切都很好" onclick="selectReleaseEmotion('一切都很好','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">一切都很好</div><div class="emotion-chip release-emotion-chip" data-name="友善的" onclick="selectReleaseEmotion('友善的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">友善的</div><div class="emotion-chip release-emotion-chip" data-name="丰满" onclick="selectReleaseEmotion('丰满','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">丰满</div><div class="emotion-chip release-emotion-chip" data-name="温柔" onclick="selectReleaseEmotion('温柔','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">温柔</div><div class="emotion-chip release-emotion-chip" data-name="热情洋溢" onclick="selectReleaseEmotion('热情洋溢','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">热情洋溢</div><div class="emotion-chip release-emotion-chip" data-name="亲切的" onclick="selectReleaseEmotion('亲切的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">亲切的</div><div class="emotion-chip release-emotion-chip" data-name="和睦的" onclick="selectReleaseEmotion('和睦的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">和睦的</div><div class="emotion-chip release-emotion-chip" data-name="和谐" onclick="selectReleaseEmotion('和谐','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">和谐</div><div class="emotion-chip release-emotion-chip" data-name="直觉的" onclick="selectReleaseEmotion('直觉的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">直觉的</div><div class="emotion-chip release-emotion-chip" data-name="合拍" onclick="selectReleaseEmotion('合拍','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">合拍</div><div class="emotion-chip release-emotion-chip" data-name="令人高兴的" onclick="selectReleaseEmotion('令人高兴的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">令人高兴的</div><div class="emotion-chip release-emotion-chip" data-name="富有爱心的" onclick="selectReleaseEmotion('富有爱心的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">富有爱心的</div><div class="emotion-chip release-emotion-chip" data-name="爱恋大量" onclick="selectReleaseEmotion('爱恋大量','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">爱恋大量</div><div class="emotion-chip release-emotion-chip" data-name="乐于接受" onclick="selectReleaseEmotion('乐于接受','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">乐于接受</div><div class="emotion-chip release-emotion-chip" data-name="轻松自如" onclick="selectReleaseEmotion('轻松自如','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">轻松自如</div><div class="emotion-chip release-emotion-chip" data-name="无冕更改" onclick="selectReleaseEmotion('无冕更改','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">无冕更改</div><div class="emotion-chip release-emotion-chip" data-name="开放" onclick="selectReleaseEmotion('开放','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">开放</div><div class="emotion-chip release-emotion-chip" data-name="幽默的" onclick="selectReleaseEmotion('幽默的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">幽默的</div><div class="emotion-chip release-emotion-chip" data-name="容光焕发" onclick="selectReleaseEmotion('容光焕发','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">容光焕发</div><div class="emotion-chip release-emotion-chip" data-name="善于接受" onclick="selectReleaseEmotion('善于接受','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">善于接受</div><div class="emotion-chip release-emotion-chip" data-name="稳当的" onclick="selectReleaseEmotion('稳当的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">稳当的</div><div class="emotion-chip release-emotion-chip" data-name="温和的" onclick="selectReleaseEmotion('温和的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">温和的</div><div class="emotion-chip release-emotion-chip" data-name="柔和的" onclick="selectReleaseEmotion('柔和的','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">柔和的</div><div class="emotion-chip release-emotion-chip" data-name="理解" onclick="selectReleaseEmotion('理解','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">理解</div><div class="emotion-chip release-emotion-chip" data-name="温暖" onclick="selectReleaseEmotion('温暖','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">温暖</div><div class="emotion-chip release-emotion-chip" data-name="幸福" onclick="selectReleaseEmotion('幸福','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">幸福</div><div class="emotion-chip release-emotion-chip" data-name="奇迹" onclick="selectReleaseEmotion('奇迹','接纳','acceptance')" style="font-size:12px;padding:6px 8px;">奇迹</div><div class="emotion-chip release-emotion-chip" data-name="永不衰老" onclick="selectReleaseEmotion('永不衰老','平和','peace')" style="font-size:12px;padding:6px 8px;">永不衰老</div><div class="emotion-chip release-emotion-chip" data-name="有觉性的" onclick="selectReleaseEmotion('有觉性的','平和','peace')" style="font-size:12px;padding:6px 8px;">有觉性的</div><div class="emotion-chip release-emotion-chip" data-name="存在" onclick="selectReleaseEmotion('存在','平和','peace')" style="font-size:12px;padding:6px 8px;">存在</div><div class="emotion-chip release-emotion-chip" data-name="无边无际" onclick="selectReleaseEmotion('无边无际','平和','peace')" style="font-size:12px;padding:6px 8px;">无边无际</div><div class="emotion-chip release-emotion-chip" data-name="镇定" onclick="selectReleaseEmotion('镇定','平和','peace')" style="font-size:12px;padding:6px 8px;">镇定</div><div class="emotion-chip release-emotion-chip" data-name="不朽" onclick="selectReleaseEmotion('不朽','平和','peace')" style="font-size:12px;padding:6px 8px;">不朽</div><div class="emotion-chip release-emotion-chip" data-name="自由" onclick="selectReleaseEmotion('自由','平和','peace')" style="font-size:12px;padding:6px 8px;">自由</div><div class="emotion-chip release-emotion-chip" data-name="满足的" onclick="selectReleaseEmotion('满足的','平和','peace')" style="font-size:12px;padding:6px 8px;">满足的</div><div class="emotion-chip release-emotion-chip" data-name="热情洋溢" onclick="selectReleaseEmotion('热情洋溢','平和','peace')" style="font-size:12px;padding:6px 8px;">热情洋溢</div><div class="emotion-chip release-emotion-chip" data-name="轻松" onclick="selectReleaseEmotion('轻松','平和','peace')" style="font-size:12px;padding:6px 8px;">轻松</div><div class="emotion-chip release-emotion-chip" data-name="同一性" onclick="selectReleaseEmotion('同一性','平和','peace')" style="font-size:12px;padding:6px 8px;">同一性</div><div class="emotion-chip release-emotion-chip" data-name="完美" onclick="selectReleaseEmotion('完美','平和','peace')" style="font-size:12px;padding:6px 8px;">完美</div><div class="emotion-chip release-emotion-chip" data-name="纯粹" onclick="selectReleaseEmotion('纯粹','平和','peace')" style="font-size:12px;padding:6px 8px;">纯粹</div><div class="emotion-chip release-emotion-chip" data-name="安静" onclick="selectReleaseEmotion('安静','平和','peace')" style="font-size:12px;padding:6px 8px;">安静</div><div class="emotion-chip release-emotion-chip" data-name="宁静" onclick="selectReleaseEmotion('宁静','平和','peace')" style="font-size:12px;padding:6px 8px;">宁静</div><div class="emotion-chip release-emotion-chip" data-name="无限空间" onclick="selectReleaseEmotion('无限空间','平和','peace')" style="font-size:12px;padding:6px 8px;">无限空间</div><div class="emotion-chip release-emotion-chip" data-name="静止" onclick="selectReleaseEmotion('静止','平和','peace')" style="font-size:12px;padding:6px 8px;">静止</div><div class="emotion-chip release-emotion-chip" data-name="永恒的" onclick="selectReleaseEmotion('永恒的','平和','peace')" style="font-size:12px;padding:6px 8px;">永恒的</div><div class="emotion-chip release-emotion-chip" data-name="安宁" onclick="selectReleaseEmotion('安宁','平和','peace')" style="font-size:12px;padding:6px 8px;">安宁</div><div class="emotion-chip release-emotion-chip" data-name="无限" onclick="selectReleaseEmotion('无限','平和','peace')" style="font-size:12px;padding:6px 8px;">无限</div><div class="emotion-chip release-emotion-chip" data-name="完整" onclick="selectReleaseEmotion('完整','平和','peace')" style="font-size:12px;padding:6px 8px;">完整</div></div></div></div>
+    <div class="release-nav" id="releaseNav">
+      <button class="release-btn secondary" id="btnPrev" onclick="prevStep()" disabled="">上一步</button>
+      <button class="release-btn primary" id="btnNext" onclick="nextStep()">开始释放</button>
+    </div>
+    <div style="margin-top:24px;">
+      <div class="step-hint text-center" style="font-size:12px; color:var(--text-light);">
+        💡 提示：释放不是压抑情绪，而是允许它存在，然后选择放下<br>
+        每一次释放，都是在增加你内在的自由度
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-journal">
+    <div class="journal-header">
+      <h2>释放日志</h2>
+    </div>
+    <div class="journal-stats" id="journalStats">
+      <div class="stat-card">
+        <div class="stat-number" id="statTotal">0</div>
+        <div class="stat-label">总释放次数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statWeek">0</div>
+        <div class="stat-label">本周释放</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statStreak">0</div>
+        <div class="stat-label">连续天数</div>
+      </div>
+    </div>
+    <div class="journal-list" id="journalList"></div>
+  </div>
+
+  <div class="page" id="page-practice">
+    <div id="practiceHome">
+      <div style="background:linear-gradient(135deg,var(--accent) 0%, #a8895f 100%);border-radius:var(--radius);padding:20px 18px;color:#fff;margin-bottom:16px;box-shadow:var(--shadow);">
+        <span style="display:inline-block;font-size:11px;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:20px;margin-bottom:8px;">练习本 · 92年释放法配套</span>
+        <div style="font-size:20px;font-weight:700;margin-bottom:4px;">释放法练习本</div>
+        <div style="font-size:13px;opacity:.9;">跟随两周课程，把"释放"变成每天都能做的练习</div>
+      </div>
+      <div class="week-tabs">
+        <button class="week-tab active" data-week="1" onclick="switchWeek(1)">第一周 · 基础释放</button>
+        <button class="week-tab" data-week="2" onclick="switchWeek(2)">第二周 · 深层释放</button>
+      </div>
+      <div id="practiceList" class="ex-grid"></div>
+    </div>
+    <div id="practiceDetail" style="display:none;">
+      <button class="back-btn" onclick="backToPractice()">← 返回练习列表</button>
+      <div id="practiceDetailContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-item active" data-page="search" onclick="switchPage('search')">
+    <span class="nav-icon">🔍</span>
+    <span class="nav-label">搜索情绪</span>
+  </button>
+  <button class="nav-item" data-page="hierarchy" onclick="switchPage('hierarchy')">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">情绪层级</span>
+  </button>
+  <button class="nav-item" data-page="release" onclick="switchPage('release')">
+    <span class="nav-icon">🧘</span>
+    <span class="nav-label">开始释放</span>
+  </button>
+  <button class="nav-item" data-page="journal" onclick="switchPage('journal')">
+    <span class="nav-icon">📖</span>
+    <span class="nav-label">释放日志</span>
+  </button>
+  <button class="nav-item" data-page="practice" onclick="switchPage('practice')">
+    <span class="nav-icon">📒</span>
+    <span class="nav-label">练习本</span>
+  </button>
+</nav>
+
+<div class="modal-overlay" id="emotionModal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-emotion-name" id="modalName"></div>
+    <div class="modal-emotion-en" id="modalEn"></div>
+    <div class="modal-info-grid">
+      <div class="modal-info-item">
+        <div class="label">所属类别</div>
+        <div class="value" id="modalCategory"></div>
+      </div>
+      <div class="modal-info-item">
+        <div class="label">核心欲望</div>
+        <div class="value" id="modalDesire"></div>
+      </div>
+      <div class="modal-info-item">
+        <div class="label">能量层级</div>
+        <div class="value" id="modalLevel"></div>
+      </div>
+      <div class="modal-info-item">
+        <div class="label">释放难度</div>
+        <div class="value" id="modalDifficulty"></div>
+      </div>
+    </div>
+    <div class="modal-section-title">情绪说明</div>
+    <div class="modal-description" id="modalDesc"></div>
+    <div class="modal-section-title">释放提示</div>
+    <div class="modal-release-tip" id="modalTip"></div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onclick="closeModalDirect()">关闭</button>
+      <button class="modal-btn primary" onclick="startReleaseFromModal()">开始释放</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="gainModal" onclick="if(event.target===this)closeGainModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-emotion-name" style="font-size:20px;">记录收获</div>
+    <div class="modal-section-title" style="margin-top:14px;">收获类型（练习本 P21 分类）</div>
+    <div class="gain-types" id="gainTypes"></div>
+    <div class="modal-section-title" style="margin-top:14px;">这次练习，你放下了什么？</div>
+    <textarea id="gainInput" placeholder="写下你的觉察、松动或释放……" style="width:100%;min-height:120px;padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:var(--font);outline:none;resize:vertical;"></textarea>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="modal-btn secondary" onclick="closeGainModal()">取消</button>
+      <button class="modal-btn primary" onclick="saveGain()">保存到日志</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="confirmModal" onclick="if(event.target===this)cancelDelete()">
+  <div class="modal-content" style="max-width:420px;" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-emotion-name" style="font-size:20px;">删除确认</div>
+    <div class="modal-description" id="confirmMsg" style="text-align:center;">确定要删除这条释放记录吗？删除后无法恢复。</div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onclick="cancelDelete()">取消</button>
+      <button class="modal-btn primary" onclick="confirmDelete()">删除</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var EMOTION_DB = {
+  categories: [
+    {
+      id: 'apathy',
+      name: '万念俱灰',
+      en: 'Apathy',
+      color: '#4a4a4a',
+      level: 200,
+      desire: '想要安全稳妥、想生存',
+      difficulty: '★★★★★',
+      description: '万念俱灰是能量层级最低的状态之一。处于这个状态的人感到彻底无助、绝望，觉得做什么都没有意义。这是最接近放弃生存的状态，但也意味着改变的动力即将萌发。',
+      releaseTip: '当你感到万念俱灰时，不要强迫自己振作起来。先允许自己感受这份无力感，然后问自己：我能允许这种感觉存在吗？释放不是消灭情绪，而是与它和平共处。',
+      emotions: [
+        {name:'无聊',en:'Bored'},{name:'无感',en:'Numb'},{name:'粗心大意',en:'Careless'},
+        {name:'冷漠',en:'Indifferent'},{name:'停止',en:'Stopped'},{name:'死亡',en:'Dead inside'},
+        {name:'被打败',en:'Defeated'},{name:'沮丧',en:'Depressed'},{name:'绝望',en:'Despairing'},
+        {name:'崩溃',en:'Broken'},{name:'绝望',en:'Hopeless'},{name:'精疲力竭',en:'Exhausted'},
+        {name:'幻想破灭',en:'Disillusioned'},{name:'死定了',en:'Doomed'},{name:'心碎的',en:'Heartbroken'},
+        {name:'失败',en:'Failed'},{name:'可遗忘的',en:'Forgettable'},{name:'没出息',en:'Good-for-nothing'},
+        {name:'放弃',en:'Giving up'},{name:'冷酷无情的',en:'Callous'},{name:'没有希望',en:'Hopeless'},
+        {name:'没有幽默感',en:'Humorless'},{name:'我不行',en:'I cannot'},{name:'我不在乎',en:'Do not care'},
+        {name:'我没有价值',en:'Worthless'},{name:'漫不经心',en:'Apathetic'},{name:'优柔寡断',en:'Indecisive'},
+        {name:'没有存在感',en:'Invisible'},{name:'太晚了',en:'Too late'},{name:'懒惰',en:'Lazy'},
+        {name:'再等等吧',en:'Procrastinating'},{name:'无精打采',en:'Listless'},{name:'失败者',en:'Loser'},
+        {name:'失败的',en:'Failing'},{name:'退缩',en:'Withdrawing'},{name:'麻木不仁',en:'Numb'},
+        {name:'击溃',en:'Crushed'},{name:'无能',en:'Incapable'},{name:'认命',en:'Resigned'},
+        {name:'宿命',en:'Fatalistic'},{name:'孤苦',en:'Forlorn'},{name:'魂不守舍',en:'Disconnected'},
+        {name:'神志恍惚',en:'Stoned'},{name:'停滞不前',en:'Stagnant'},{name:'太惨',en:'Miserable'},
+        {name:'冷酷无情',en:'Ruthless'},{name:'漫无目的',en:'Aimless'},{name:'没用',en:'Useless'},
+        {name:'模糊不清',en:'Unclear'},{name:'成虫',en:'Worm'},{name:'有什么用呢',en:'What is the point'},
+        {name:'为什么要活呢',en:'Why live'},{name:'不值得',en:'Not worth it'}
+      ]
+    },
+    {
+      id: 'grief',
+      name: '悲苦',
+      en: 'Grief',
+      color: '#5b6abf',
+      level: 200,
+      desire: '想要安全稳妥、想生存',
+      difficulty: '★★★★☆',
+      description: '悲苦是失去之后的自然反应。这种情绪虽然痛苦，但比万念俱灰更有能量。你在乎，你感受到了痛。悲伤是心灵在消化失去的过程，允许自己悲伤是走向疗愈的重要一步。',
+      releaseTip: '悲伤不需要被解决，它需要被经历。当你感到悲伤时，试着把注意力放在身体里感受悲伤的位置，深呼吸，问自己：我能放下对这份悲伤的执着吗？',
+      emotions: [
+        {name:'被遗弃',en:'Abandoned'},{name:'被羞辱',en:'Humiliated'},{name:'被控告',en:'Accused'},
+        {name:'被控诉苦',en:'Blamed'},{name:'丢脸',en:'Ashamed'},{name:'被背叛',en:'Betrayed'},
+        {name:'忧郁',en:'Melancholy'},{name:'被欺骗',en:'Deceived'},{name:'绝望',en:'Despairing'},
+        {name:'失望',en:'Disappointed'},{name:'心烦意乱',en:'Distraught'},{name:'尴尬的',en:'Embarrassed'},
+        {name:'被忘掉',en:'Forgotten'},{name:'愧疚的',en:'Guilty'},{name:'无望的',en:'Despairing'},
+        {name:'头痛',en:'Headachy'},{name:'沮丧',en:'Depressed'},{name:'无助的',en:'Helpless'},
+        {name:'受伤',en:'Hurt'},{name:'要是就好了',en:'If only'},{name:'被忽略的',en:'Ignored'},
+        {name:'不够',en:'Not enough'},{name:'伤心欲绝',en:'Devastated'},{name:'不公平',en:'Unfair'},
+        {name:'被遗忘',en:'Overlooked'},{name:'极度渴望',en:'Desperate'},{name:'损失',en:'Loss'},
+        {name:'哀怨',en:'Mournful'},{name:'被误解',en:'Misunderstood'},{name:'没人关心我',en:'Uncared for'},
+        {name:'没人爱我',en:'Unloved'},{name:'乡怨',en:'Homesick'},{name:'错失',en:'Missing out'},
+        {name:'遗憾',en:'Regretful'},{name:'可怜的我',en:'Poor me'},{name:'懊悔',en:'Remorseful'},
+        {name:'被剥夺的',en:'Deprived'},{name:'悲哀',en:'Sorrowful'},{name:'悲痛',en:'Grieving'},
+        {name:'被人落泊的',en:'Cast aside'},{name:'被折磨',en:'Tormented'},{name:'不被爱',en:'Unloved'},
+        {name:'不开心',en:'Unhappy'},{name:'没人要',en:'Unwanted'},{name:'脆弱',en:'Vulnerable'},
+        {name:'为什么是我',en:'Why me'},{name:'受伤的',en:'Wounded'}
+      ]
+    },
+    {
+      id: 'fear',
+      name: '恐惧',
+      en: 'Fear',
+      color: '#7b68ae',
+      level: 200,
+      desire: '想要安全稳妥、想生存',
+      difficulty: '★★★★☆',
+      description: '恐惧是人类最原始的情绪之一，源于对生存的威胁感。恐惧让我们收缩、逃避、过度防御。但恐惧也保护了我们。关键是不让恐惧控制我们的选择。',
+      releaseTip: '面对恐惧时，先承认它的存在：我感到害怕，这没关系。然后问自己：这个恐惧在试图保护我什么？当你理解了恐惧背后的需求，它就失去了控制你的力量。',
+      emotions: [
+        {name:'焦虑',en:'Anxious'},{name:'不安',en:'Uneasy'},{name:'小心谨慎',en:'Cautious'},
+        {name:'又冷又疑',en:'Cold and suspicious'},{name:'胆小怯懦',en:'Timid'},{name:'自我防卫',en:'Defensive'},
+        {name:'不信任',en:'Distrustful'},{name:'怀疑',en:'Doubtful'},{name:'害怕',en:'Afraid'},
+        {name:'尴尬的',en:'Awkward'},{name:'逃避的',en:'Avoidant'},{name:'紧张的',en:'Tense'},
+        {name:'狂乱的',en:'Frantic'},{name:'犹豫不决',en:'Hesitant'},{name:'紧张的',en:'Nervous'},
+        {name:'歇斯底里',en:'Hysterical'},{name:'拘束的',en:'Constrained'},{name:'紧张',en:'Stressed'},
+        {name:'恐慌',en:'Panicked'},{name:'紧张',en:'On edge'},{name:'偏执狂',en:'Paranoid'},
+        {name:'被吓到的',en:'Scared'},{name:'偷偷摸摸',en:'Sneaky'},{name:'不可靠',en:'Unreliable'},
+        {name:'焦虑',en:'Worried'},{name:'怀疑的',en:'Skeptical'},{name:'忧郁',en:'Gloomy'},
+        {name:'被吓坏的',en:'Terrified'},{name:'多疑的',en:'Suspicious'},{name:'局促生硬',en:'Stiff'},
+        {name:'被吓坏的',en:'Frightened'},{name:'被威胁的',en:'Threatened'},{name:'羞怯',en:'Shy'},
+        {name:'陷入困境',en:'Trapped'},{name:'迟疑不决',en:'Indecisive'},{name:'心神不宁',en:'Restless'},
+        {name:'被恐吓的',en:'Intimidated'},{name:'想逃',en:'Want to escape'},{name:'逃避',en:'Escaping'},
+        {name:'小心翼翼',en:'Overcareful'},{name:'担心',en:'Worrying'},{name:'恐惧',en:'Fearful'},
+        {name:'惊骇',en:'Horrified'}
+      ]
+    },
+    {
+      id: 'desire',
+      name: '贪求',
+      en: 'Lust',
+      color: '#c0392b',
+      level: 200,
+      desire: '想要被认同',
+      difficulty: '★★★☆☆',
+      description: '贪求是永不满足的渴望。想要更多、更好、不同。这种情绪驱动我们追求，但也让我们永远觉得不够。贪求的核心是相信外在的东西能填补内在的空缺。',
+      releaseTip: '当你感到贪求时，问自己：如果没有这个东西，我会怎样？你会发现，你追求的不是那个东西本身，而是它代表的感觉。那份感觉，你本来就有。',
+      emotions: [
+        {name:'放弃',en:'Giving up'},{name:'预测',en:'Anticipating'},{name:'冷酷无情',en:'Cold'},
+        {name:'等不了',en:'Impatient'},{name:'冲动',en:'Impulsive'},{name:'渴求',en:'Craving'},
+        {name:'渴求的',en:'Desiring'},{name:'被驱使的',en:'Driven'},{name:'轻浮的',en:'Frivolous'},
+        {name:'操纵的',en:'Manipulative'},{name:'嫉妒',en:'Jealous'},{name:'剥削',en:'Exploitative'},
+        {name:'过度依恋',en:'Over-attached'},{name:'贪婪的',en:'Greedy'},{name:'失意的',en:'Frustrated'},
+        {name:'贪求',en:'Grasping'},{name:'囤积',en:'Hoarding'},{name:'饥饿',en:'Hungry'},
+        {name:'我想',en:'I want'},{name:'不耐烦',en:'Impatient'},{name:'好色的',en:'Lustful'},
+        {name:'浮荡的',en:'Wandering'},{name:'操纵别人',en:'Manipulative'},{name:'幸运的',en:'Fleeting'},
+        {name:'一定要得到',en:'Must have'},{name:'从来不满足',en:'Never satisfied'},{name:'永不满足',en:'Insatiable'},
+        {name:'没意识的',en:'Oblivious'},{name:'着迷的',en:'Obsessed'},{name:'渴望强盛的',en:'Yearning'},
+        {name:'固执己见',en:'Stubborn'},{name:'鲁莽',en:'Reckless'},{name:'残忍的',en:'Cruel'},
+        {name:'算计吞噬',en:'Calculating'},{name:'自私的',en:'Selfish'},{name:'如饥似渴',en:'Ravenous'},
+        {name:'战壕',en:'Cautious'}
+      ]
+    },
+    {
+      id: 'anger',
+      name: '愤怒',
+      en: 'Anger',
+      color: '#e74c3c',
+      level: 200,
+      desire: '想要被认同',
+      difficulty: '★★★☆☆',
+      description: '愤怒是一种高能量的情绪，它比悲伤和恐惧更有力量。愤怒告诉我们有些事情不对，但如果被愤怒控制，它会破坏关系、消耗能量。愤怒的核心往往是被忽视、被伤害的感觉。',
+      releaseTip: '愤怒时，先不要行动。深呼吸，问自己：我真正想要的是什么？愤怒通常是表层情绪，下面藏着受伤、恐惧或不被理解。找到下面的情绪，释放会更容易。',
+      emotions: [
+        {name:'伤人感情的',en:'Hurtful'},{name:'好斗的',en:'Combative'},{name:'挑衅的',en:'Provocative'},
+        {name:'好辩的',en:'Argumentative'},{name:'好战的',en:'Belligerent'},{name:'激烈',en:'Volatile'},
+        {name:'令人愤慨的',en:'Outraged'},{name:'刻薄的',en:'Mean'},{name:'挑衅的',en:'Defiant'},
+        {name:'苛求的',en:'Demanding'},{name:'毁灭性的',en:'Destructive'},{name:'嫉妒的',en:'Envious'},
+        {name:'脾气暴躁',en:'Short-tempered'},{name:'凶猛的',en:'Fierce'},{name:'讽刺的',en:'Sarcastic'},
+        {name:'气愤',en:'Angry'},{name:'愤慨',en:'Indignant'},{name:'狂怒的',en:'Furious'},
+        {name:'严厉',en:'Harsh'},{name:'憎恨',en:'Hateful'},{name:'敌意',en:'Hostile'},
+        {name:'不耐烦',en:'Impatient'},{name:'愤愤不平',en:'Resentful'},{name:'生气',en:'Mad'},
+        {name:'舒适',en:'Comfortable'},{name:'怒气冲冲',en:'Fuming'},{name:'疯狂',en:'Crazy'},
+        {name:'卑鄙',en:'Nasty'},{name:'残忍',en:'Cruel'},{name:'凶残的',en:'Brutal'},
+        {name:'又愤世嫉俗',en:'Cynical'},{name:'偏执的',en:'Paranoid'},{name:'坏脾气',en:'Bad-tempered'},
+        {name:'报复的',en:'Vengeful'},{name:'粗鲁',en:'Rude'},{name:'怨恨',en:'Bitter'},
+        {name:'自私',en:'Selfish'},{name:'粗鲁',en:'Coarse'},{name:'野蛮',en:'Savage'},
+        {name:'冲突激化',en:'Escalating'},{name:'怒气冲天',en:'Enraged'},{name:'五内俱焚',en:'Consumed'},
+        {name:'怀恨在心',en:'Grudge-holding'},{name:'钢铁般的',en:'Iron-willed'},{name:'有意',en:'Intentional'},
+        {name:'倔强',en:'Stubborn'},{name:'偏执',en:'Obsessive'},{name:'复仇心切',en:'Vengeful'},
+        {name:'恶毒',en:'Vicious'},{name:'暴力',en:'Violent'},{name:'易爆发的',en:'Explosive'},
+        {name:'意志薄弱',en:'Weak-willed'},{name:'任性的',en:'Willful'}
+      ]
+    },
+    {
+      id: 'pride',
+      name: '自尊自傲',
+      en: 'Pride',
+      color: '#f39c12',
+      level: 200,
+      desire: '想要控制',
+      difficulty: '★★★☆☆',
+      description: '自尊自傲比愤怒更高一层，它让我们感到我比别人强。适度的自尊是健康的，但过度的骄傲会让我们封闭、拒绝成长。骄傲的核心是害怕被看穿不够好。',
+      releaseTip: '当你感到骄傲或自傲时，问自己：如果放下这个我很好的感觉，我会是什么？真正的自信不需要比较，它来自内在的平静。',
+      emotions: [
+        {name:'无家可寻',en:'Homeless'},{name:'超然离群',en:'Detached'},{name:'自恋',en:'Narcissistic'},
+        {name:'固执己见',en:'Opinionated'},{name:'无聊',en:'Bored'},{name:'聪明',en:'Clever'},
+        {name:'封闭的',en:'Closed'},{name:'沾沾自喜',en:'Smug'},{name:'思路清晰',en:'Clear-minded'},
+        {name:'轻蔑的',en:'Contemptuous'},{name:'酷',en:'Cool'},{name:'自信的',en:'Confident'},
+        {name:'鄙弃',en:'Scornful'},{name:'傲慢专断',en:'Arrogant'},{name:'批判的',en:'Critical'},
+        {name:'虚度美德',en:'Vain'},{name:'扬扬得意',en:'Triumphant'},{name:'自以为是',en:'Self-righteous'},
+        {name:'自以为是',en:'Presumptuous'},{name:'成功',en:'Successful'},{name:'不悦地',en:'Displeased'},
+        {name:'批量的',en:'Judgmental'},{name:'批判性的',en:'Judging'},{name:'自命无所不知的',en:'Know-it-all'},
+        {name:'心胸狭隘',en:'Narrow-minded'},{name:'永远无法不错',en:'Infallible'},{name:'武断',en:'Dogmatic'},
+        {name:'盛气凌人',en:'Overbearing'},{name:'神气十足',en:'Pompous'},{name:'偏颇的',en:'Biased'},
+        {name:'成见',en:'Prejudiced'},{name:'自以为是公正的',en:'Self-justifying'},{name:'愤世不忌',en:'Cynical'},
+        {name:'自恋的',en:'Narcissistic'},{name:'自鸣得意',en:'Self-satisfied'},{name:'自私',en:'Selfish'},
+        {name:'自命不凡',en:'Pretentious'},{name:'势利眼',en:'Snobbish'},{name:'独特',en:'Unique'},
+        {name:'被宠坏的',en:'Spoiled'},{name:'禁欲主义',en:'Ascetic'},{name:'顽固不化',en:'Inflexible'},
+        {name:'自高自大',en:'Conceited'},{name:'优越感',en:'Superior'},{name:'强硬不妥协',en:'Uncompromising'},
+        {name:'无感觉的',en:'Unfeeling'},{name:'不受影响的',en:'Unaffected'},{name:'不屈服的',en:'Unyielding'},
+        {name:'爱慕虚荣',en:'Vain'}
+      ]
+    },
+    {
+      id: 'courage',
+      name: '无畏',
+      en: 'Courage',
+      color: '#27ae60',
+      level: 300,
+      desire: '想要控制',
+      difficulty: '★★☆☆☆',
+      description: '无畏是第一个正能量层级。从这里开始，我们不再被情绪控制，而是能够主动选择。无畏不是没有恐惧，而是带着恐惧依然前行。这个层级的人开始看到可能性而非限制。',
+      releaseTip: '当你处于无畏状态时，你已经在释放的路上了。继续保持开放和好奇，问自己：还有什么是我可以放下的？每一次释放，都会让你更加自由。',
+      emotions: [
+        {name:'喜欢冒险的',en:'Adventurous'},{name:'警惕的',en:'Alert'},{name:'自由的',en:'Free'},
+        {name:'胸有成竹的',en:'Assured'},{name:'机警的',en:'Vigilant'},{name:'有中心的',en:'Centered'},
+        {name:'有把握的',en:'Confident'},{name:'愉快',en:'Cheerful'},{name:'思路清晰',en:'Clear'},
+        {name:'怜悯',en:'Compassionate'},{name:'能干的',en:'Capable'},{name:'自信的',en:'Confident'},
+        {name:'创新的',en:'Creative'},{name:'大胆',en:'Bold'},{name:'果断的',en:'Decisive'},
+        {name:'有活力',en:'Energetic'},{name:'热心的',en:'Enthusiastic'},{name:'热情',en:'Passionate'},
+        {name:'自以为是',en:'Self-assured'},{name:'成功',en:'Successful'},{name:'探索',en:'Exploring'},
+        {name:'灵活的',en:'Flexible'},{name:'专注的',en:'Focused'},{name:'乐善好施',en:'Giving'},
+        {name:'开心',en:'Happy'},{name:'可敬的',en:'Honorable'},{name:'幽默',en:'Humorous'},
+        {name:'独立的',en:'Independent'},{name:'首创精神',en:'Initiative'},{name:'直觉',en:'Intuitive'},
+        {name:'所向披靡',en:'Invincible'},{name:'有爱的',en:'Loving'},{name:'头脑清楚',en:'Clear-headed'},
+        {name:'自强不息',en:'Self-reliant'},{name:'来者不拒',en:'Open'},{name:'开放',en:'Open'},
+        {name:'乐观',en:'Optimistic'},{name:'洞察力',en:'Insightful'},{name:'积极',en:'Positive'},
+        {name:'意志坚强',en:'Strong-willed'},{name:'敏感的',en:'Sensitive'},{name:'坚强的',en:'Strong'},
+        {name:'自给自足',en:'Self-sufficient'},{name:'犀利的',en:'Sharp'},{name:'坚定的',en:'Determined'},
+        {name:'助人为乐',en:'Helpful'},{name:'不知疲惫',en:'Tireless'},{name:'精力充沛',en:'Vigorous'},
+        {name:'乐意',en:'Willing'},{name:'热忱',en:'Zealous'}
+      ]
+    },
+    {
+      id: 'acceptance',
+      name: '接纳',
+      en: 'Acceptance',
+      color: '#2ecc71',
+      level: 350,
+      desire: '想要控制',
+      difficulty: '★★☆☆☆',
+      description: '接纳意味着不再与现实对抗。我们不再试图改变外在来让自己舒服，而是学会与一切和平共处。接纳不是妥协，而是一种深层的智慧。看到事物的本来面目。',
+      releaseTip: '在接纳的状态中，释放变得自然。你不再需要努力放下，因为你已经不再抓紧。继续保持这份开放，让释放成为你生活的一部分。',
+      emotions: [
+        {name:'丰盛',en:'Abundant'},{name:'有能力的',en:'Capable'},{name:'自豪',en:'Proud'},
+        {name:'平衡',en:'Balanced'},{name:'归属感',en:'Belonging'},{name:'天生灵魂',en:'Natural soul'},
+        {name:'同情心',en:'Compassionate'},{name:'体贴的',en:'Considerate'},{name:'高兴',en:'Glad'},
+        {name:'兴高采烈',en:'Elated'},{name:'拥抱',en:'Embracing'},{name:'善解人意',en:'Understanding'},
+        {name:'丰富',en:'Rich'},{name:'一切都很好',en:'All is well'},{name:'友善的',en:'Friendly'},
+        {name:'丰满',en:'Full'},{name:'温柔',en:'Gentle'},{name:'热情洋溢',en:'Warm'},
+        {name:'亲切的',en:'Kind'},{name:'和睦的',en:'Harmonious'},{name:'和谐',en:'Harmonious'},
+        {name:'直觉的',en:'Intuitive'},{name:'合拍',en:'In sync'},{name:'令人高兴的',en:'Delightful'},
+        {name:'富有爱心的',en:'Loving'},{name:'爱恋大量',en:'Abundant love'},{name:'乐于接受',en:'Receptive'},
+        {name:'轻松自如',en:'Effortless'},{name:'无冕更改',en:'Unchanged'},{name:'开放',en:'Open'},
+        {name:'幽默的',en:'Humorous'},{name:'容光焕发',en:'Radiant'},{name:'善于接受',en:'Accepting'},
+        {name:'稳当的',en:'Steady'},{name:'温和的',en:'Mild'},{name:'柔和的',en:'Soft'},
+        {name:'理解',en:'Understanding'},{name:'温暖',en:'Warm'},{name:'幸福',en:'Happy'},
+        {name:'奇迹',en:'Wonder'}
+      ]
+    },
+    {
+      id: 'peace',
+      name: '平和',
+      en: 'Peace',
+      color: '#1abc9c',
+      level: 400,
+      desire: '无欲求',
+      difficulty: '★☆☆☆☆',
+      description: '平和是最高的情绪层级，也是圣多纳释放法追求的终极状态。在这里，没有恐惧、没有贪求、没有控制的需要。你只是存在，完全地、自由地存在。这就是波澜不惊。',
+      releaseTip: '当你触碰到平和的状态，不需要做任何事。只需要安住其中，让它渗透你的每一个细胞。这份平和一直都在，只是被情绪的云层遮住了。释放，就是让云层散去。',
+      emotions: [
+        {name:'永不衰老',en:'Ageless'},{name:'有觉性的',en:'Aware'},{name:'存在',en:'Being'},
+        {name:'无边无际',en:'Boundless'},{name:'镇定',en:'Calm'},{name:'不朽',en:'Immortal'},
+        {name:'自由',en:'Free'},{name:'满足的',en:'Fulfilled'},{name:'热情洋溢',en:'Radiant'},
+        {name:'轻松',en:'Easy'},{name:'同一性',en:'One'},{name:'完美',en:'Perfect'},
+        {name:'纯粹',en:'Pure'},{name:'安静',en:'Quiet'},{name:'宁静',en:'Serene'},
+        {name:'无限空间',en:'Spacious'},{name:'静止',en:'Still'},{name:'永恒的',en:'Eternal'},
+        {name:'安宁',en:'Peaceful'},{name:'无限',en:'Infinite'},{name:'完整',en:'Complete'}
+      ]
+    }
+  ]
+};
+
+var emotionIndex = [];
+EMOTION_DB.categories.forEach(function(cat) {
+  cat.emotions.forEach(function(em) {
+    emotionIndex.push({
+      name: em.name,
+      en: em.en,
+      category: cat.name,
+      categoryId: cat.id,
+      color: cat.color,
+      level: cat.level,
+      desire: cat.desire,
+      description: cat.description,
+      releaseTip: cat.releaseTip,
+      difficulty: cat.difficulty
+    });
+  });
+});
+
+var currentStep = 0;
+var currentEmotion = null;
+var releaseAnswers = {};
+var journalEntries = JSON.parse(localStorage.getItem('releaseJournal') || '[]');
+
+function switchPage(pageId) {
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) {
+    pages[i].classList.remove('active');
+  }
+  document.getElementById('page-' + pageId).classList.add('active');
+  var navItems = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < navItems.length; i++) {
+    navItems[i].classList.remove('active');
+  }
+  var targetNav = document.querySelector('.nav-item[data-page="' + pageId + '"]');
+  if (targetNav) targetNav.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (pageId === 'journal') renderJournal();
+  if (pageId === 'release') initReleaseSteps();
+  if (pageId === 'practice') renderPracticeList();
+}
+
+var searchInput = document.getElementById('searchInput');
+var searchClear = document.getElementById('searchClear');
+
+searchInput.addEventListener('input', function() {
+  var val = this.value.trim();
+  searchClear.classList.toggle('show', val.length > 0);
+  if (val.length === 0) {
+    document.getElementById('searchResults').innerHTML = '<div class="empty-state"><div class="empty-icon">🌊</div><p>输入你当下感受到的情绪词汇<br>或点击上方标签快速搜索<br><br>找到情绪，是释放的第一步</p></div>';
+    return;
+  }
+  performSearch(val);
+});
+
+function clearSearch() {
+  searchInput.value = '';
+  searchClear.classList.remove('show');
+  searchInput.focus();
+  document.getElementById('searchResults').innerHTML = '<div class="empty-state"><div class="empty-icon">🌊</div><p>输入你当下感受到的情绪词汇<br>或点击上方标签快速搜索<br><br>找到情绪，是释放的第一步</p></div>';
+}
+
+function quickSearch(term) {
+  searchInput.value = term;
+  searchClear.classList.add('show');
+  performSearch(term);
+}
+
+function performSearch(query) {
+  var q = query.toLowerCase();
+  var results = emotionIndex.filter(function(em) {
+    return em.name.toLowerCase().indexOf(q) !== -1 ||
+           em.en.toLowerCase().indexOf(q) !== -1 ||
+           em.category.toLowerCase().indexOf(q) !== -1;
+  });
+  var grouped = {};
+  results.forEach(function(em) {
+    if (!grouped[em.category]) grouped[em.category] = [];
+    grouped[em.category].push(em);
+  });
+  var container = document.getElementById('searchResults');
+  if (results.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><p>没有找到"' + query + '"相关的情绪<br>试试其他词汇，如：焦虑、愤怒、无力</p></div>';
+    return;
+  }
+  var html = '';
+  var order = ['万念俱灰','悲苦','恐惧','贪求','愤怒','自尊自傲','无畏','接纳','平和'];
+  var catNames = Object.keys(grouped).sort(function(a,b) { return order.indexOf(a) - order.indexOf(b); });
+  catNames.forEach(function(catName) {
+    html += '<div class="result-group"><div class="result-group-title">' + catName + '</div>';
+    grouped[catName].forEach(function(em) {
+      html += '<div class="result-card" onclick="showEmotionDetail(\'' + em.categoryId + '\',\'' + em.name + '\')"><div class="emotion-dot" style="background:' + em.color + '"></div><div class="emotion-name">' + highlightMatch(em.name, query) + '</div><div class="emotion-category">' + em.category + '</div></div>';
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function highlightMatch(text, query) {
+  var idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return text;
+  return text.slice(0, idx) + '<strong style="color:var(--accent)">' + text.slice(idx, idx + query.length) + '</strong>' + text.slice(idx + query.length);
+}
+
+function showEmotionDetail(categoryId, emotionName) {
+  var cat = EMOTION_DB.categories.find(function(c) { return c.id === categoryId; });
+  if (!cat) return;
+  var em = cat.emotions.find(function(e) { return e.name === emotionName; });
+  if (!em) return;
+  currentEmotion = { name: emotionName, en: em.en, category: cat.name, categoryId: cat.id, desire: cat.desire, level: cat.level, difficulty: cat.difficulty, description: cat.description, releaseTip: cat.releaseTip };
+  document.getElementById('modalName').textContent = emotionName;
+  document.getElementById('modalEn').textContent = em.en;
+  document.getElementById('modalCategory').textContent = cat.name;
+  document.getElementById('modalDesire').textContent = cat.desire;
+  document.getElementById('modalLevel').textContent = cat.level;
+  document.getElementById('modalDifficulty').textContent = cat.difficulty;
+  document.getElementById('modalDesc').textContent = cat.description;
+  document.getElementById('modalTip').textContent = cat.releaseTip;
+  document.getElementById('emotionModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('emotionModal')) {
+    closeModalDirect();
+  }
+}
+
+function closeModalDirect() {
+  document.getElementById('emotionModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function startReleaseFromModal() {
+  closeModalDirect();
+  switchPage('release');
+  setTimeout(function() {
+    document.getElementById('currentEmotionDisplay').classList.add('show');
+    document.getElementById('ceName').textContent = currentEmotion.name;
+    document.getElementById('ceCategory').textContent = currentEmotion.category;
+    document.getElementById('ceDesire').textContent = currentEmotion.desire;
+    initReleaseSteps();
+  }, 100);
+}
+
+function renderHierarchy() {
+  var container = document.getElementById('hierarchyContent');
+  var desireGroups = {
+    '想要安全稳妥、想生存': ['apathy', 'grief', 'fear'],
+    '想要被认同': ['desire', 'anger'],
+    '想要控制': ['pride', 'courage', 'acceptance', 'peace']
+  };
+  var desireIcons = {
+    '想要安全稳妥、想生存': '🏠',
+    '想要被认同': '❤️',
+    '想要控制': '⚙️'
+  };
+  var html = '';
+  Object.keys(desireGroups).forEach(function(desire) {
+    var catIds = desireGroups[desire];
+    html += '<div class="desire-section"><div class="desire-header"><span class="desire-icon">' + desireIcons[desire] + '</span><div><div class="desire-title">' + desire + '</div><div class="desire-subtitle">' + catIds.length + ' 个情绪类别</div></div></div>';
+    catIds.forEach(function(catId) {
+      var cat = EMOTION_DB.categories.find(function(c) { return c.id === catId; });
+      if (!cat) return;
+      html += '<div class="category-card" id="cat-' + catId + '"><div class="category-header" onclick="toggleCategory(\'' + catId + '\')"><div class="category-color" style="background:' + cat.color + '"></div><div class="category-name">' + cat.name + '</div><div class="category-count">' + cat.emotions.length + ' 个情绪</div><div class="category-arrow">▼</div></div><div class="category-body"><div class="emotion-grid">';
+      cat.emotions.forEach(function(em) {
+        html += '<div class="emotion-chip" onclick="showEmotionDetail(\'' + catId + '\',\'' + em.name + '\')">' + em.name + '</div>';
+      });
+      html += '</div></div></div>';
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function toggleCategory(catId) {
+  var card = document.getElementById('cat-' + catId);
+  card.classList.toggle('expanded');
+}
+
+var RELEASE_STEPS = [
+  { question: '你现在的感受是什么？', hint: '花一点时间，感受你身体里的情绪。不需要分析，只需要觉察。是紧张？愤怒？悲伤？还是别的什么？', type: 'emotion-select' },
+  { question: '你能允许这个感觉存在吗？', hint: '不是要你喜欢它，只是允许它在这里。就像允许天气变化一样，允许这个情绪存在。', type: 'yes-no-maybe', options: ['能，我允许', '不能，我不想', '也许，我可以试试'] },
+  { question: '你能放下这个感觉吗？', hint: '不是永远放下，只是此刻。就像放下手中拿着的东西一样，你可以选择放下这个情绪。', type: 'yes-no-maybe', options: ['能，我放下', '不能，我放不下', '也许，我可以试试'] },
+  { question: '你愿意放下吗？', hint: '愿意和能够是不同的。你可能能够放下，但还不想。问问自己，你是否真的愿意？', type: 'yes-no-maybe', options: ['愿意', '不愿意', '还在犹豫'] },
+  { question: '什么时候放下？', hint: '就是现在。不需要等到合适的时候。此刻就是最好的时机。', type: 'timing', options: ['现在', '稍后', '还没准备好'] },
+  { question: '释放之后，你感觉如何？', hint: '感受一下现在的状态。可能感觉轻松了一些，也可能变化不大。无论什么感觉，都是对的。', type: 'feeling-check', options: ['感觉轻松了', '有一些变化', '感觉差不多', '感觉更强烈了'] }
+];
+
+function initReleaseSteps() {
+  currentStep = 0;
+  releaseAnswers = {};
+  renderReleaseProgress();
+  renderReleaseStep();
+  updateReleaseNav();
+}
+
+function renderReleaseProgress() {
+  var container = document.getElementById('releaseProgress');
+  var html = '';
+  RELEASE_STEPS.forEach(function(_, i) {
+    var cls = 'progress-dot';
+    if (i < currentStep) cls += ' done';
+    if (i === currentStep) cls += ' active';
+    html += '<div class="' + cls + '"></div>';
+  });
+  container.innerHTML = html;
+}
+
+function renderReleaseStep() {
+  var container = document.getElementById('releaseSteps');
+  var step = RELEASE_STEPS[currentStep];
+  var optionsHtml = '';
+  if (step.type === 'emotion-select') {
+    optionsHtml = '<div class="step-hint">从下方选择最接近你当下感受的情绪，或搜索你的情绪：</div><div style="display:flex;gap:8px;margin-bottom:12px;"><input type="text" id="releaseSearchInput" placeholder="搜索情绪..." style="flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:var(--font);outline:none;" oninput="filterReleaseEmotions(this.value)"></div><div id="releaseEmotionList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;max-height:200px;overflow-y:auto;padding:4px;">';
+    EMOTION_DB.categories.forEach(function(cat) {
+      cat.emotions.forEach(function(em) {
+        optionsHtml += '<div class="emotion-chip release-emotion-chip" data-name="' + em.name + '" onclick="selectReleaseEmotion(\'' + em.name + '\',\'' + cat.name + '\',\'' + cat.id + '\')" style="font-size:12px;padding:6px 8px;">' + em.name + '</div>';
+      });
+    });
+    optionsHtml += '</div>';
+  } else if (step.type === 'yes-no-maybe' || step.type === 'timing' || step.type === 'feeling-check') {
+    optionsHtml = '<div class="step-options">';
+    step.options.forEach(function(opt) {
+      var selected = releaseAnswers[currentStep] === opt ? ' selected' : '';
+      optionsHtml += '<button class="step-option' + selected + '" onclick="selectOption(\'' + opt.replace(/'/g, "\\'") + '\')">' + opt + '</button>';
+    });
+    optionsHtml += '</div>';
+  }
+  container.innerHTML = '<div class="release-step active"><div class="step-number">' + (currentStep + 1) + '</div><div class="step-question">' + step.question + '</div><div class="step-hint">' + step.hint + '</div>' + optionsHtml + '</div>';
+}
+
+function filterReleaseEmotions(query) {
+  var q = query.toLowerCase();
+  var chips = document.querySelectorAll('.release-emotion-chip');
+  for (var i = 0; i < chips.length; i++) {
+    var name = chips[i].dataset.name;
+    chips[i].style.display = name.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+  }
+}
+
+function selectReleaseEmotion(name, category, categoryId) {
+  releaseAnswers[currentStep] = name;
+  currentEmotion = { name: name, category: category, categoryId: categoryId };
+  document.getElementById('currentEmotionDisplay').classList.add('show');
+  document.getElementById('ceName').textContent = name;
+  document.getElementById('ceCategory').textContent = category;
+  var cat = EMOTION_DB.categories.find(function(c) { return c.id === categoryId; });
+  document.getElementById('ceDesire').textContent = cat ? cat.desire : '';
+  var chips = document.querySelectorAll('.release-emotion-chip');
+  for (var i = 0; i < chips.length; i++) {
+    if (chips[i].dataset.name === name) {
+      chips[i].style.background = 'var(--accent)';
+      chips[i].style.color = '#fff';
+    } else {
+      chips[i].style.background = '';
+      chips[i].style.color = '';
+    }
+  }
+  setTimeout(function() { nextStep(); }, 500);
+}
+
+function selectOption(option) {
+  releaseAnswers[currentStep] = option;
+  var btns = document.querySelectorAll('.step-option');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle('selected', btns[i].textContent === option);
+  }
+  setTimeout(function() { nextStep(); }, 400);
+}
+
+function nextStep() {
+  if (currentStep < RELEASE_STEPS.length - 1) {
+    currentStep++;
+    renderReleaseProgress();
+    renderReleaseStep();
+    updateReleaseNav();
+  } else {
+    saveJournalEntry();
+    showReleaseComplete();
+  }
+}
+
+function prevStep() {
+  if (currentStep > 0) {
+    currentStep--;
+    renderReleaseProgress();
+    renderReleaseStep();
+    updateReleaseNav();
+  }
+}
+
+function updateReleaseNav() {
+  document.getElementById('btnPrev').disabled = currentStep === 0;
+  var btnNext = document.getElementById('btnNext');
+  if (currentStep === RELEASE_STEPS.length - 1) {
+    btnNext.textContent = '完成释放';
+  } else if (currentStep === 0) {
+    btnNext.textContent = '开始释放';
+  } else {
+    btnNext.textContent = '下一步';
+  }
+}
+
+function showReleaseComplete() {
+  var container = document.getElementById('releaseSteps');
+  var emotionText = currentEmotion ? '你刚刚释放了「' + currentEmotion.name + '」的情绪。' : '';
+  container.innerHTML = '<div class="release-step active" style="text-align:center;"><div style="font-size:48px;margin-bottom:16px;">✨</div><div class="step-question">释放完成</div><div class="step-hint">' + emotionText + '<br>每一次释放，都是在增加内在的自由度。<br>如果情绪还在，可以再次进行释放流程。<br><br>🌟 记住：释放不是一次性的，它是一个持续的过程。</div><div class="breathing-circle">深呼吸</div></div>';
+  document.getElementById('btnNext').textContent = '再次释放';
+  document.getElementById('btnNext').onclick = function() {
+    document.getElementById('btnNext').onclick = nextStep;
+    initReleaseSteps();
+    document.getElementById('currentEmotionDisplay').classList.remove('show');
+  };
+  document.getElementById('btnPrev').disabled = false;
+  document.getElementById('btnPrev').onclick = function() {
+    document.getElementById('btnPrev').onclick = prevStep;
+    currentStep = RELEASE_STEPS.length - 1;
+    renderReleaseProgress();
+    renderReleaseStep();
+    updateReleaseNav();
+  };
+  showToast('释放记录已保存');
+}
+
+function saveJournalEntry() {
+  var entry = {
+    id: Date.now(),
+    date: new Date().toISOString(),
+    emotion: currentEmotion ? currentEmotion.name : '未指定',
+    category: currentEmotion ? currentEmotion.category : '',
+    source: '释放引擎',
+    answers: {},
+    note: ''
+  };
+  for (var key in releaseAnswers) {
+    if (releaseAnswers.hasOwnProperty(key)) {
+      entry.answers[key] = releaseAnswers[key];
+    }
+  }
+  journalEntries.unshift(entry);
+  localStorage.setItem('releaseJournal', JSON.stringify(journalEntries));
+}
+
+function escapeHtml(s) {
+  if (s === undefined || s === null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderJournal() {
+  document.getElementById('statTotal').textContent = journalEntries.length;
+  var now = new Date();
+  var weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+  var weekCount = 0;
+  for (var i = 0; i < journalEntries.length; i++) {
+    if (new Date(journalEntries[i].date) > weekAgo) weekCount++;
+  }
+  document.getElementById('statWeek').textContent = weekCount;
+  var streak = 0;
+  var dates = {};
+  for (var i = 0; i < journalEntries.length; i++) {
+    var d = new Date(journalEntries[i].date).toDateString();
+    dates[d] = true;
+  }
+  var checkDate = new Date();
+  while (dates[checkDate.toDateString()]) {
+    streak++;
+    checkDate.setDate(checkDate.getDate() - 1);
+  }
+  document.getElementById('statStreak').textContent = streak;
+  var container = document.getElementById('journalList');
+  if (journalEntries.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📖</div><p>还没有释放记录<br>开始你的第一次释放吧</p></div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < journalEntries.length; i++) {
+    var entry = journalEntries[i];
+    var date = new Date(entry.date);
+    var dateStr = date.toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric' }) + ' ' + date.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' });
+    var src = entry.source || (entry.emotion && entry.emotion.indexOf('练习收获') === 0 ? '练习本' : '释放引擎');
+    var srcCls = src === '练习本' ? ' je-source from-practice' : ' je-source';
+    var noteHtml = (entry.note && entry.note.trim()) ? '<div class="je-note">' + escapeHtml(entry.note) + '</div>' : '';
+    html += '<div class="journal-entry">'
+      + '<button class="je-delete" onclick="deleteEntry(' + entry.id + ')" title="删除">✕</button>'
+      + '<div class="je-source' + srcCls + '">来源：' + escapeHtml(src) + '</div>'
+      + '<div class="je-date">' + dateStr + '</div>'
+      + '<div class="je-emotion">' + escapeHtml(entry.emotion) + '</div>'
+      + (entry.category ? '<div class="je-category">' + escapeHtml(entry.category) + '</div>' : '')
+      + noteHtml
+      + '</div>';
+  }
+  container.innerHTML = html;
+}
+
+var pendingDeleteId = null;
+function deleteEntry(id) {
+  pendingDeleteId = id;
+  document.getElementById('confirmModal').classList.add('show');
+}
+function cancelDelete() {
+  pendingDeleteId = null;
+  document.getElementById('confirmModal').classList.remove('show');
+}
+function confirmDelete() {
+  if (pendingDeleteId === null) return;
+  var pid = String(pendingDeleteId);
+  journalEntries = journalEntries.filter(function(e) { return String(e.id) !== pid; });
+  localStorage.setItem('releaseJournal', JSON.stringify(journalEntries));
+  pendingDeleteId = null;
+  document.getElementById('confirmModal').classList.remove('show');
+  renderJournal();
+  showToast('记录已删除');
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2000);
+}
+
+/* ===== Practice Book Module (练习本) ===== */
+var WANTS = ['想要被认同', '想要控制', '想要安全/ 生存'];
+
+/* 收获分类 —— 练习本 P21 原文 */
+var GAIN_TYPES = [
+  '行为或态度上的积极转变','日常活动进行得更顺利更高效','更多有效的沟通',
+  '解决问题的能力持续增强','灵活性和适应性增强','行动时更加轻松自信',
+  '获得某项成就','洞察力与领悟力增强','融合而完整','新的开始',
+  '学到新的技能','更积极','负面情绪减少'
+];
+
+/* 正确的目标叙述方式 —— 练习本 P35 原文十条 */
+var GOAL_RULES = [
+  { t:'用现在时描述——就好像目标已经实现了一样', d:'如果把它描述成未来的事件，那就是把它一直放在遥不可及的地方——未来。' },
+  { t:'以积极的方式表达目标，不要有任何负面否定的内容', d:'写上你想要的东西——而不是你不想要的东西。确保你的目标里不包含你想摆脱的那些东西。把不想要的记在心里往往会创造它。' },
+  { t:'它应该让你感觉是真实的、现实的，对你来说是正确的', d:'可能的，有一种"我可以拥有它"的感觉。（莱斯特和风都提到"要敢想"，不要因为这一条限制了自己的想像力。）' },
+  { t:'把你自己包括进去，明确指出你与这个目标的关系', d:'目标里要出现"我"，说明你与这个结果之间的关系。' },
+  { t:'用词准确、简洁', d:'在保证目标完整地表达出你所想要的东西的同时，用的词越少越好，选择准确的词语来表达。' },
+  { t:'要具体，但不要限制', d:'不要因为限定细节而限制了结果，让事情尽可能的开放，以允许结果比你原来计划的还要好。' },
+  { t:'对目标的描述应当有助于你的释放', d:'读出来时，它应该能带你进入释放，而不是让你更紧绷。' },
+  { t:'去掉"想要"这个词', d:'"想要"本身就是匮乏。目标里不出现"想要"。' },
+  { t:'说明目标或最终结果，而不是说明你打算如何实现它的方法', d:'写结果，不写路径。' },
+  { t:'每个目标叙述集中于一个目标', d:'不要在一个目标里设定多个目标，这样会分散你的精力。' }
+];
+
+/* 目标陈述示例 —— 练习本 P37-38 原文 */
+var GOAL_EXAMPLES = [
+  { cat:'工作/ 职业/ 财务', list:[
+    '我允许自己高效、成功地管理我的（业务、部门）',
+    '我允许自己在工作日也轻松地释放。',
+    '我允许自己在我的（生活）（事业）中轻松地拥有最好的工作。',
+    '我允许自己轻松地找到一个能充分发挥我的创造力并为我提供丰厚报酬的职业。'
+  ]},
+  { cat:'人际关系/ 沟通交流', list:[
+    '我允许自己与＿＿＿建立＿＿＿的关系（轻松/放松/舒适/友好/和谐/爱/建设性/支持性/开放/诚实/亲切/互惠互利）',
+    '我允许自己轻松而有效地与我的＿＿＿（配偶、同事、老板、下属、子女、朋友）沟通。',
+    '我允许我与＿＿＿，以公正而互利地方式解决所有问题。',
+    '我允许自己无论如何都爱并且接纳或原谅自己（或＿＿＿）。'
+  ]},
+  { cat:'饮食', list:[
+    '我允许自己轻松达到并保持理想的体重。',
+    '我允许自己在享受美食的同时保持身体健康和苗条。'
+  ]},
+  { cat:'健康方面', list:[
+    '我允许自己轻松自然地释放。',
+    '我允许自己睡个好觉，在早晨＿＿点，精神饱满、焕然一新地醒来。',
+    '我允许自己轻松愉快地建立和保持一种促进健康和健身的生活方式。',
+    '我允许自己享受不吸烟的乐趣。',
+    '我允许自己充满爱意地支持＿＿＿的成长和（自由）。',
+    '我允许＿＿＿拥有他们自己想要的东西。'
+  ]}
+];
+
+/* 六步骤 —— 练习本 P85 原文 */
+var SIX_STEPS = [
+  '你必须想要波澜不惊超过你想要被认同和控制。（你必须想要自由超过想要世界）',
+  '决定通过释放来达到波澜不惊。',
+  '看到所有情绪感受都源自两个想要：想要被认同、想要控制。立即看到并立马释放想要被认同、想要控制。',
+  '持续释放，无论独处或人前，释放你所有的想要被认同和想要控制。',
+  '如果你卡住了，放开你对这个卡住的想要控制。',
+  '每次释放，你都会感到更轻松、更快乐。如果你持续释放，你会持续感到更轻松、更快乐。'
+];
+/* 到达波澜不惊的门票 —— P86 原文 */
+var TICKET_THREE = [
+  '仅仅释放这三个想要。',
+  '让它持续不断并且立即释放。允许想要被认同，想要控制和想要安全出现在你的意识里并且立即让它离开。',
+  '让它成为一个自己实践的工具。'
+];
+
+/* 十五个练习板块 —— 全部按练习本原文的标题、列名、说明文字 */
+var PRACTICE = {
+  week1: [
+    { id:'w1-change', lesson:'第 1 课', icon:'📝', tag:'P9-13', title:'在我的生活中我想改变什么', subtitle:'愿望清单 + 想改变的人事物',
+      type:'single', wish:true,
+      colLabel:'列出生活中你想要改变的一些情况、人或问题',
+      feelLabel:'我现在对此有什么感受？',
+      hint:'想想在你生活中你想要改变人、事、物，把它们写在第一列。然后，写下你现在对某一情境的感受，允许自己去感受它，并释放这种感受。反复感受，持续释放。一旦你已经完全释放了这种感受，在"释放了吗"这一列打勾。当你对那个主题已经释放到感觉良好时，在"感受好吗"这一列打勾。然后执行相同的步骤，释放你现在对下一个主题的感受。' },
+
+    { id:'w1-suppress', lesson:'第 2 课', icon:'🔄', tag:'P14-17', title:'压抑或表达', subtitle:'处理情绪的两种旧方式',
+      type:'double',
+      colLabels:['回忆一件我当时压抑情绪的具体事情','回忆一件我当时表达情绪的具体事情'],
+      feelLabel:'我现在对此有什么感受？',
+      hint:'在第一列写下几件你压抑情绪的事情，然后在第二列，写下你现在对那件事的感受。当你充分地释放了那个感受，在写着"释放了吗"这一列打勾。重复以上步骤，持续释放你现在的感受，直到你对那件事情的感受很好。一旦你对那件事情的感受很好，在"感受好吗"那一列打勾，然后对下一件事情进行释放。表达那一列同样如此。' },
+
+    { id:'w1-success', lesson:'第 3 课', icon:'🎯', tag:'P18-20', title:'成功', subtitle:'释放对成功与失败的感受',
+      type:'double', topic:true, noFeel:true,
+      colLabels:['如果成功，我现在的感受是什么？','如果失败，我现在的感受是什么？'],
+      hint:'想一想在你的生活中你想变得更成功的一个领域，把它写在"主题"的那一行。接下来，写下你现在对在这个领域取得成功的感觉，并完全释放这种感觉。一旦你完全释放了这种感觉，在"释放了吗？"这一列打勾。当你释放到感觉良好时，在"感受好吗？"这一列打勾。通过同样的步骤，释放你现在对失败的感受。持续反复释放对成功和失败的感受，直到你感到完成了，感觉更有能力在那个领域取得成功。' },
+
+    { id:'w1-like', lesson:'第 4 课', icon:'⚖️', tag:'P22-28', title:'喜欢与不喜欢', subtitle:'针对任一主题深入释放',
+      type:'double', topic:true,
+      colLabels:['我喜欢该主题的哪些方面？','我不喜欢该主题的哪些方面？'],
+      feelLabel:'我现在对此有什么感受？',
+      hint:'这份表格可以用来进一步释放关于任何主题的信息，比如超重、吸烟、一段关系、你的工作、一个人、一种情况等等。在页面的顶部写下一个主题。然后在"我喜欢什么？"这一列写一个你关于这个主题喜欢的某个方面，把现在的感觉写在感受栏，彻底释放后打勾。接下来在"我不喜欢什么？"这一列写一个不喜欢的方面，重复以上步骤。继续这个过程，直到你感觉在这个主题上释放了/解放了。记住，我们正在让抓着感觉不放的旧习惯离开，所以也要继续释放好感觉。' },
+
+    { id:'w1-must', lesson:'第 5 课', icon:'✅', tag:'P30-32', title:'我必须做的事', subtitle:'那些"不得不"的束缚',
+      type:'single',
+      colLabel:'我觉得我必须做（不得不做）的事情',
+      feelLabel:'我现在对此有什么感受？',
+      hint:'在题为"我觉得我必须做的事情"的专栏里列出你认为你"必须"做的事情，一次写一件，然后写下你现在对它的感受。释放每个感觉，直到完成。一旦你完全释放了某个感觉，在"释放了吗？"这一列打勾。重复以上步骤，直到你感觉良好，然后在"感受好吗？"这一列打勾。然后继续释放你在表上列出的下一件事情。' },
+
+    { id:'w1-goal', lesson:'第 6 课', icon:'🌟', tag:'P33-46', title:'使用释放法达到你的目标', subtitle:'目标陈述 · 目标表格 · 行动清单',
+      type:'goal',
+      feelLabel:'我对目标现在有什么感受？',
+      hint:'将你的目标写在页面顶部的行上，可参考"目标陈述示例"。写完目标后，再写下你现在对目标的感受，接着释放每一种感受。一旦你完全释放了这种感觉，在"释放了吗？"这一列打勾。当你释放到感觉良好时，在"感受好吗？"这一列打勾。再读一遍目标，然后重复上述步骤，直到你对你的目标感到无畏、接纳或平静。然后在你的行动清单上做释放。' }
+  ],
+  week2: [
+    { id:'w2-recall-ac', lesson:'第 7 课', icon:'💭', tag:'P51-54', title:'回想（想要被认同 / 想要控制）', subtitle:'从具体事件中看见两个想要',
+      type:'double', wants:true,
+      colLabels:['回想起一件当时我想要被认同的具体事情','回想起一件当时我想要控制的具体事情'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'在"回想起一件当时我想要被认同的具体事情"这一列中，尽可能多地写下你所记得的想要被认同的事情。在第二列，写下你现在想要的，即：想要被认同、想要控制。释放每一个"想要"，一旦你已经彻底释放，请在"释放了吗？"这一列打勾。当你释放到感觉良好时，在"感觉好吗？"这一列打勾，然后继续释放你列出的下一件事情。' },
+
+    { id:'w2-wants', lesson:'第 8 课', icon:'🕊️', tag:'P56-59', title:'释放想要', subtitle:'想要的与不想要的',
+      type:'double', wants:true,
+      colLabels:['我想要什么？','我不想要什么？'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'把你想要的东西和不想要的东西列一个清单。然后回到第一列，一次处理一件事情，感受你现在的想要并释放它。一旦你完全释放了这个想要，在"释放了吗？"这一栏打勾。继续释放每一个"想要"，直到你对那件事感觉良好，在"感觉好吗？"这一栏打勾，然后进入下一件事情。之后转到第二列，按照同样的步骤，释放你现在每一件事情的想要（欲望）。' },
+
+    { id:'w2-control', lesson:'第 9 课', icon:'🎛️', tag:'P61-63', title:'想要控制', subtitle:'控制与被控制各自的获益',
+      type:'double', wants:true,
+      colLabels:['从想要控制中我能得到什么?','从想要被控制中我能得到什么?'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'把你从想要控制中得到的东西列个清单，然后把你从想要被控制中得到的东西也列个清单。回到第一列，看着第一项，觉察你现在的想要并释放它。一旦你完全释放了这个想要，在"释放了吗？"这一列打勾。继续释放，直到你感觉良好，在"感觉好吗？"这一列打勾，然后继续下一项，再次释放。最后转到第二列，按照同样的步骤，释放你对每一项的想要。' },
+
+    { id:'w2-approval', lesson:'第 10 课', icon:'🤝', tag:'P65-67', title:'想要被认同', subtitle:'被认同与不被认同各自的获益',
+      type:'double', wants:true,
+      colLabels:['从想要被认同中我能得到什么?','从想要不被认同中我能得到什么?'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'把你从想要被认同中得到的东西列个清单，然后把你从想要不被认同中得到的东西也列个清单。回到第一列，看着第一项，觉察你现在的想要并释放它。一旦你完全释放了这个想要，在"释放了吗？"这一列打勾。继续释放，直到你感觉良好，在"感觉好吗？"这一列打勾，然后继续下一项，再次释放。最后转到第二列，按照同样的步骤，释放你对每一项的想要。' },
+
+    { id:'w2-recall-sec', lesson:'第 11 课', icon:'🛡️', tag:'P69-71', title:'回想（想要安全 / 生存）', subtitle:'最基础的那个想要',
+      type:'single', wants:true,
+      colLabel:'回想起一件当时我想要安全/ 生存的具体事情',
+      feelLabel:'我现在对此想要什么？',
+      hint:'在第一列，尽可能多地写下你所记得的想要安全或生存的事情。在第二列，写下你现在对那件事的想要的，即"想要被认同"、"想要控制"、"想要安全"。释放每一个想要直到完成，然后在"释放了吗？"那一栏打勾。当你释放到感觉良好时，在"感觉好吗？"这一栏打勾。然后转到清单上下一件事情上，继续释放。' },
+
+    { id:'w2-stuck', lesson:'第 12 课', icon:'🔓', tag:'P72-75', title:'化解卡住（胶着）', subtitle:'好处与坏处交替释放',
+      type:'double', topic:true, wants:true, alternate:true,
+      colLabels:['对我有什么好处？','对我有什么坏处？'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'选择一个你正在经历卡住的主题，例如做一个决定、一个目标、一个不良习惯或行为模式、一段麻烦的关系或情况、一个反复出现的感受。把"对我有什么好处"写下来，然后在它旁边写下"想要被认同"、"想要控制"或"想要安全"，完全释放这些现在想要的，然后在"释放了吗？"那一栏打勾。当你释放到感觉良好时，在"感觉好吗？"这一栏打勾。然后把"对我有什么坏处"写下来，按同样的步骤去做。再回到另一个好处，重复同样的步骤。这样你就可以不断交替释放好处与坏处，并且保持它们的平衡。如果你想不出来了，就在那一列写上"无"，然后继续你的释放。' },
+
+    { id:'w2-seeing', lesson:'第 13 课', icon:'👁️', tag:'P76-79', title:'觉察你的想要被认同、想要控制和想要安全', subtitle:'看见三大想要的具体行为方式',
+      type:'triple', wants:true,
+      colLabels:['我寻求被认同的方式','我试图控制的方式','我寻求安全的方式'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'列出所有你试图获得认同、试图控制、寻求安全的方式。逐一看着每个方式，觉察你现在想要的，是想要被认同，想要控制，还是想要安全，写下来并完全释放它们，然后在"释放了吗？"那一栏打勾。继续释放，直到你感觉良好时，在"感觉好吗？"这一栏打勾。这将帮助你不断地留意你的行为，并确定你是想要被认同，想要控制，还是想要安全，这将给你一个更好的当场释放的机会。然后你可以选择是否采取行动。' },
+
+    { id:'w2-happy', lesson:'第 14 课', icon:'☀️', tag:'P80-82', title:'快乐', subtitle:'快乐是我们内在固有的状态',
+      type:'double', wants:true, goodLabel:'感到快乐吗',
+      colLabels:['我需要什么才能获得快乐？','我需要避免什么才能获得快乐？'],
+      feelLabel:'我现在对此想要什么？',
+      hint:'快乐是我们内在固有的状态。列出你认为自己需要什么才能获得快乐，然后列出为了获得快乐你需要避免的事情。回到第一列，每次取一项，写出它是想要被认同、想要控制还是想要安全，完全释放它，然后在"释放了吗？"那一栏打勾。继续释放，直到你感到快乐。在为了得到快乐你所需要避免的事情上，重复同样的步骤，释放直到你感到快乐。' },
+
+    { id:'w2-six', lesson:'第 15 课', icon:'🧘', tag:'P84-86', title:'六步骤', subtitle:'到达波澜不惊（自由）的门票',
+      type:'steps',
+      hint:'这是整个课程的收束。六步骤不是一次性练习，而是可以反复对照的行动准则。你可以逐条勾选，作为日常释放的自检。' }
+  ]
+};
+
+var PRACTICE_STATE = JSON.parse(localStorage.getItem('practiceState') || '{}');
+var currentWeek = 1;
+var currentExerciseId = null;
+var currentWant = WANTS[0];
+
+function savePracticeState(){ localStorage.setItem('practiceState', JSON.stringify(PRACTICE_STATE)); }
+function getExState(id){
+  if(!PRACTICE_STATE[id]) PRACTICE_STATE[id] = { items: [] };
+  if(!PRACTICE_STATE[id].items) PRACTICE_STATE[id].items = [];
+  return PRACTICE_STATE[id];
+}
+function findExercise(id){
+  var all = PRACTICE.week1.concat(PRACTICE.week2);
+  return all.find(function(e){ return e.id === id; });
+}
+function newIid(){ return 'i' + Date.now() + Math.floor(Math.random()*1000); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function switchWeek(w){
+  currentWeek = w;
+  document.querySelectorAll('.week-tab').forEach(function(t){ t.classList.toggle('active', +t.dataset.week === w); });
+  renderPracticeList();
+}
+
+function renderPracticeList(){
+  var list = PRACTICE['week' + currentWeek];
+  var html = '';
+  list.forEach(function(ex){
+    var st = getExState(ex.id);
+    var total = 0, done = 0, pill = '未开始';
+    if(ex.type === 'steps'){
+      var sp = st.steps || [];
+      total = SIX_STEPS.length;
+      done = sp.filter(function(x){ return x; }).length;
+      pill = done ? (done + '/' + total + ' 已贯彻') : '未开始';
+    } else if(ex.type === 'goal'){
+      var acts = st.actions || [];
+      var its = st.items || [];
+      total = acts.length + its.length;
+      done = acts.filter(function(i){ return i.released; }).length + its.filter(function(i){ return i.released; }).length;
+      if(!total && st.statement) pill = '已写下目标';
+      else if(total) pill = done + '/' + total + ' 已释放';
+    } else {
+      var src = st.items || [];
+      total = src.length;
+      done = src.filter(function(i){ return i.released; }).length;
+      if(total) pill = done + '/' + total + ' 已释放';
+      else if(st.wish && (st.wish.personal || st.wish.career || st.wish.course)) pill = '已写愿望清单';
+      else if(st.topic) pill = '已定主题';
+    }
+    html += '<div class="ex-card" onclick="openExercise(' + "'" + ex.id + "'" + ')">'
+      + '<div class="ex-icon">' + (ex.icon || '📋') + '</div>'
+      + '<div class="ex-tag">' + (ex.lesson || ex.tag || '') + '</div>'
+      + '<div class="ex-title">' + ex.title + '</div>'
+      + '<div class="ex-desc">' + ex.subtitle + '</div>'
+      + '<div class="ex-progress">' + pill + '</div>'
+      + '</div>';
+  });
+  document.getElementById('practiceList').innerHTML = html;
+}
+
+function openExercise(id){
+  currentExerciseId = id;
+  document.getElementById('practiceHome').style.display = 'none';
+  document.getElementById('practiceDetail').style.display = 'block';
+  if(findExercise(id).wants) currentWant = WANTS[0];
+  renderExercise(id);
+  window.scrollTo({ top:0 });
+}
+
+function backToPractice(){
+  document.getElementById('practiceDetail').style.display = 'none';
+  document.getElementById('practiceHome').style.display = 'block';
+  currentExerciseId = null;
+  renderPracticeList();
+}
+
+function itemRowHtml(it, ex){
+  var wantHtml = (ex.wants && it.want) ? '<span class="prac-want" title="点击清除" onclick="clearItemWant(' + '\u0027' + it.iid + '\u0027' + ')">' + it.want + '</span>' : '';
+  var feelDisabled = it.released ? '' : 'disabled';
+  var feelCls = it.feelingGood ? 'pi-toggle feeling' : 'pi-toggle';
+  var relCls = it.released ? 'pi-toggle released' : 'pi-toggle';
+  var goodLab = ex.goodLabel || '感觉好吗';
+  var goodDone = ex.goodLabel ? '已快乐 ✓' : '感觉好 ✓';
+  var feelBlock = '';
+  if(!ex.noFeel){
+    feelBlock = '<div class="pi-feel-label">' + (ex.feelLabel || '我现在对此有什么感受？') + '</div>'
+      + '<textarea class="pi-feel-input" rows="2" placeholder="写下此刻真实的答案…" oninput="itemFeel(' + '\u0027' + it.iid + '\u0027' + ',this.value)">' + esc(it.feel || '') + '</textarea>';
+  }
+  return '<div class="prac-item" data-iid="' + it.iid + '">'
+    + '<div class="pi-top">'
+      + '<input class="pi-text-input" value="' + esc(it.text).replace(/'/g,'&#39;') + '" placeholder="写在这里…" oninput="itemText(' + '\u0027' + it.iid + '\u0027' + ',this.value)">'
+      + '<button class="pi-del" onclick="delItem(' + '\u0027' + it.iid + '\u0027' + ')" title="删除">✕</button>'
+    + '</div>'
+    + (ex.wants ? wantHtml : '')
+    + feelBlock
+    + '<div class="prac-status">'
+      + '<button class="' + relCls + '" onclick="toggleReleased(' + '\u0027' + it.iid + '\u0027' + ')">' + (it.released ? '已释放 ✓' : '释放了吗') + '</button>'
+      + '<button class="' + feelCls + '" ' + feelDisabled + ' onclick="toggleFeeling(' + '\u0027' + it.iid + '\u0027' + ')">' + (it.feelingGood ? goodDone : goodLab) + '</button>'
+    + '</div>'
+    + '</div>';
+}
+function itemText(iid, v){ var st=getExState(currentExerciseId); var it=st.items.find(function(x){ return x.iid===iid; }); if(it){ it.text=v; savePracticeState(); } }
+function itemFeel(iid, v){ var st=getExState(currentExerciseId); var it=st.items.find(function(x){ return x.iid===iid; }); if(it){ it.feel=v; savePracticeState(); } }
+function renderExercise(id){
+  var ex = findExercise(id);
+  var st = getExState(id);
+  var c = document.getElementById('practiceDetailContent');
+  var html = '<div class="prac-detail-title">' + ex.title + '</div>'
+    + '<div class="prac-detail-sub">' + ex.subtitle + '</div>'
+    + '<div class="prac-src">练习本原文 ' + ex.tag + '</div>'
+    + '<div class="prac-hint">' + ex.hint + '</div>';
+
+  /* --- 六步骤（阅读 + 自检） --- */
+  if(ex.type === 'steps'){
+    if(!st.steps) st.steps = [];
+    html += '<div class="six-wrap">';
+    SIX_STEPS.forEach(function(s, i){
+      var on = st.steps[i] ? ' done' : '';
+      html += '<div class="six-step' + on + '" onclick="toggleStep(' + i + ')">'
+        + '<div class="six-no">第' + ['一','二','三','四','五','六'][i] + '步</div>'
+        + '<div class="six-txt">' + s + '</div></div>';
+    });
+    html += '</div>';
+    html += '<div class="ticket"><div class="ticket-t">到达波澜不惊（自由）的门票</div>';
+    TICKET_THREE.forEach(function(s, i){ html += '<div class="ticket-i"><b>' + (i+1) + '.</b> ' + s + '</div>'; });
+    html += '<div class="ticket-q">现在，你已经拥有走向自由所需要的一切。</div></div>';
+    html += '<div class="prac-actions"><button class="release-go" onclick="practiceGoRelease()">🧘 开始释放</button><button class="gain-go" onclick="openGainModal()">📝 记录收获</button></div>';
+    c.innerHTML = html;
+    return;
+  }
+
+  /* --- 愿望清单（P9 三分区） --- */
+  if(ex.wish){
+    if(!st.wish) st.wish = { personal:'', career:'', course:'' };
+    html += '<div class="wish-box"><div class="wish-t">愿望清单 · 我想改变或改善的东西</div>'
+      + '<div class="wish-hint">这个课程是你生活中许多积极变化的开始，所以让你的清单远远超过你认为你在课程中能完成的。</div>'
+      + '<label class="wish-l">个人生活方面</label><textarea class="wish-i" rows="3" oninput="wishSave(\'personal\',this.value)">' + esc(st.wish.personal) + '</textarea>'
+      + '<label class="wish-l">事业方面</label><textarea class="wish-i" rows="3" oninput="wishSave(\'career\',this.value)">' + esc(st.wish.career) + '</textarea>'
+      + '<label class="wish-l">我想从这个课程中得到什么</label><textarea class="wish-i" rows="3" oninput="wishSave(\'course\',this.value)">' + esc(st.wish.course) + '</textarea>'
+      + '</div>';
+  }
+
+  /* --- 目标板块 --- */
+  if(ex.type === 'goal'){
+    html += '<div class="goal-sec-t">① 我想要实现的目标</div>';
+    html += '<textarea class="prac-goal-input" id="goalStatement" placeholder="把你的目标写在这里（现在时 · 积极 · 包含我 · 只写一个目标）">' + esc(st.statement || '') + '</textarea>';
+
+    html += '<div class="goal-sec-t">② 正确的目标叙述方式 · 十条自检</div>';
+    html += '<div class="prac-rules">';
+    GOAL_RULES.forEach(function(r, i){
+      var checked = (st.rules && st.rules[i]) ? 'checked' : '';
+      html += '<label class="prac-rule"><input type="checkbox" ' + checked + ' onchange="toggleRule(' + i + ',this.checked)">'
+        + '<span><b>' + (i+1) + '. ' + r.t + '</b><i>' + r.d + '</i></span></label>';
+    });
+    html += '</div>';
+
+    html += '<div class="goal-sec-t">③ 目标陈述示例 <em>（点击任意一条填入上方）</em></div><div class="goal-ex">';
+    GOAL_EXAMPLES.forEach(function(g){
+      html += '<div class="goal-ex-cat">' + g.cat + '</div>';
+      g.list.forEach(function(s){
+        html += '<div class="goal-ex-i" onclick="useGoalExample(this)">' + esc(s) + '</div>';
+      });
+    });
+    html += '</div>';
+
+    html += '<div class="goal-sec-t">④ 目标表格 · 我对目标现在有什么感受？</div>';
+    html += '<div class="prac-col-wrap" style="grid-template-columns:1fr;"><div class="prac-col"><div id="col-0">';
+    st.items.filter(function(it){ return (it.col===undefined?0:it.col) === 0; }).forEach(function(it){ html += itemRowHtml(it, ex); });
+    html += '</div><div class="prac-add"><input id="addInput-0" placeholder="写下你现在对目标的一个感受…" onkeydown="if(event.key===\'Enter\')addItem(0)"><button onclick="addItem(0)">添加</button></div></div></div>';
+
+    html += '<div class="goal-sec-t">⑤ 目标行动清单 · 为了达成目标"我要做的事"</div>';
+    html += '<div class="prac-col-wrap" style="grid-template-columns:1fr;"><div class="prac-col"><div id="goalActionList"></div>'
+      + '<div class="prac-add"><input id="goalActionInput" placeholder="我要做的一件事…" onkeydown="if(event.key===\'Enter\')addGoalAction()"><button onclick="addGoalAction()">添加</button></div></div></div>';
+
+    html += '<div class="prac-actions"><button class="release-go" onclick="practiceGoRelease()">🧘 开始释放</button><button class="gain-go" onclick="openGainModal()">📝 记录收获</button></div>';
+    c.innerHTML = html;
+    var gi = document.getElementById('goalStatement');
+    gi.addEventListener('input', function(){ st.statement = this.value; savePracticeState(); });
+    renderGoalActions(id);
+    return;
+  }
+
+  /* --- 顶部主题行 --- */
+  if(ex.topic){
+    html += '<div class="prac-topic"><label>主题：</label><input id="exTopic" value="' + esc(st.topic || '').replace(/'/g,'&#39;') + '" placeholder="写下这次练习的主题…" oninput="topicSave(this.value)"></div>';
+  }
+
+  /* --- 三大想要选择条 --- */
+  if(ex.wants){
+    html += '<div class="prac-want-tip">新增条目时会自动标记下方选中的想要</div><div class="prac-want-bar">';
+    WANTS.forEach(function(w){
+      var active = (currentWant === w) ? ' released' : '';
+      html += '<button class="pi-toggle' + active + '" style="text-align:center;" onclick="setWant(\'' + w + '\')">' + w + '</button>';
+    });
+    html += '</div>';
+  }
+
+  if(ex.alternate){
+    html += '<div class="alt-tip">交替释放：好处 → 坏处 → 好处 …… 保持两边平衡。想不出来时，直接填「无」再继续释放。</div>';
+  }
+
+  var ncols = ex.type === 'single' ? 1 : (ex.type === 'triple' ? 3 : 2);
+  var labels = ex.type === 'single' ? [ex.colLabel] : ex.colLabels;
+  html += '<div class="prac-col-wrap" style="grid-template-columns:repeat(' + ncols + ',1fr);">';
+  for(var ci=0; ci<ncols; ci++){
+    var colItems = st.items.filter(function(it){ return (it.col===undefined?0:it.col) === ci; });
+    html += '<div class="prac-col"><div class="prac-col-title">' + (labels[ci] || '') + '</div><div id="col-' + ci + '">';
+    colItems.forEach(function(it){ html += itemRowHtml(it, ex); });
+    html += '</div>';
+    html += '<div class="prac-add"><input id="addInput-' + ci + '" placeholder="添加一条…" onkeydown="if(event.key===\'Enter\')addItem(' + ci + ')"><button onclick="addItem(' + ci + ')">添加</button>'
+      + (ex.alternate ? '<button class="none-btn" onclick="addNone(' + ci + ')">无</button>' : '')
+      + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="prac-actions"><button class="release-go" onclick="practiceGoRelease()">🧘 开始释放</button><button class="gain-go" onclick="openGainModal()">📝 记录收获</button></div>';
+  c.innerHTML = html;
+}
+
+function topicSave(v){ var st = getExState(currentExerciseId); st.topic = v; savePracticeState(); }
+function wishSave(k, v){ var st = getExState(currentExerciseId); if(!st.wish) st.wish={personal:'',career:'',course:''}; st.wish[k] = v; savePracticeState(); }
+function toggleStep(i){ var st = getExState(currentExerciseId); if(!st.steps) st.steps=[]; st.steps[i] = !st.steps[i]; savePracticeState(); renderExercise(currentExerciseId); }
+function useGoalExample(el){
+  var t = el.textContent;
+  var gi = document.getElementById('goalStatement');
+  gi.value = t;
+  var st = getExState(currentExerciseId);
+  st.statement = t; savePracticeState();
+  gi.focus();
+  showToast('已填入目标陈述，按十条规则改写成你自己的话');
+}
+function addNone(col){
+  var ex = findExercise(currentExerciseId);
+  var st = getExState(currentExerciseId);
+  st.items.push({ iid:newIid(), text:'无', feel:'', col:col, released:false, feelingGood:false, want:(ex.wants?currentWant:'') });
+  savePracticeState();
+  renderExercise(currentExerciseId);
+}
+function setWant(w){ currentWant = w; renderExercise(currentExerciseId); }
+
+function addItem(col){
+  var ex = findExercise(currentExerciseId);
+  var input = document.getElementById('addInput-' + col);
+  var text = input.value.trim();
+  if(!text) return;
+  var st = getExState(currentExerciseId);
+  st.items.push({ iid:newIid(), text:text, feel:'', col:(ex.type==='single'?0:col), released:false, feelingGood:false, want:(ex.wants?currentWant:'') });
+  input.value = '';
+  savePracticeState();
+  renderExercise(currentExerciseId);
+}
+function toggleReleased(iid){
+  var st = getExState(currentExerciseId);
+  var it = st.items.find(function(x){ return x.iid === iid; });
+  if(!it) return;
+  it.released = !it.released;
+  if(!it.released) it.feelingGood = false;
+  savePracticeState();
+  renderExercise(currentExerciseId);
+}
+
+function toggleFeeling(iid){
+  var st = getExState(currentExerciseId);
+  var it = st.items.find(function(x){ return x.iid === iid; });
+  if(!it || !it.released) return;
+  it.feelingGood = !it.feelingGood;
+  savePracticeState();
+  renderExercise(currentExerciseId);
+}
+
+function clearItemWant(iid){
+  var st = getExState(currentExerciseId);
+  var it = st.items.find(function(x){ return x.iid === iid; });
+  if(it) it.want = '';
+  savePracticeState();
+  renderExercise(currentExerciseId);
+}
+
+function delItem(iid){
+  var st = getExState(currentExerciseId);
+  st.items = st.items.filter(function(x){ return x.iid !== iid; });
+  savePracticeState();
+  renderExercise(currentExerciseId);
+}
+
+/* goal exercise */
+function toggleRule(i, checked){
+  var st = getExState(currentExerciseId);
+  if(!st.rules) st.rules = [];
+  st.rules[i] = checked;
+  savePracticeState();
+}
+function renderGoalActions(id){
+  var st = getExState(id);
+  if(!st.actions) st.actions = [];
+  var html = '';
+  st.actions.forEach(function(it){
+    var feelDisabled = it.released ? '' : 'disabled';
+    var feelCls = it.feelingGood ? 'pi-toggle feeling' : 'pi-toggle';
+    var relCls = it.released ? 'pi-toggle released' : 'pi-toggle';
+    html += '<div class="prac-item" data-iid="' + it.iid + '">'
+      + '<span class="pi-text">' + esc(it.text) + '</span>'
+      + '<div class="prac-status">'
+      +   '<button class="' + relCls + '" onclick="toggleGoalReleased(\'' + it.iid + '\')">' + (it.released ? '已释放 ✓' : '释放了吗') + '</button>'
+      +   '<button class="' + feelCls + '" ' + feelDisabled + ' onclick="toggleGoalFeeling(\'' + it.iid + '\')">' + (it.feelingGood ? '感觉好 ✓' : '感觉好吗') + '</button>'
+      + '</div>'
+      + '<button class="pi-del" onclick="delGoalAction(\'' + it.iid + '\')" title="删除">✕</button>'
+      + '</div>';
+  });
+  document.getElementById('goalActionList').innerHTML = html;
+}
+function addGoalAction(){
+  var input = document.getElementById('goalActionInput');
+  var text = input.value.trim();
+  if(!text) return;
+  var st = getExState(currentExerciseId);
+  if(!st.actions) st.actions = [];
+  st.actions.push({ iid:newIid(), text:text, released:false, feelingGood:false });
+  input.value = '';
+  savePracticeState();
+  renderGoalActions(currentExerciseId);
+}
+function toggleGoalReleased(iid){
+  var st = getExState(currentExerciseId);
+  var it = (st.actions||[]).find(function(x){ return x.iid === iid; });
+  if(!it) return;
+  it.released = !it.released;
+  if(!it.released) it.feelingGood = false;
+  savePracticeState();
+  renderGoalActions(currentExerciseId);
+}
+function toggleGoalFeeling(iid){
+  var st = getExState(currentExerciseId);
+  var it = (st.actions||[]).find(function(x){ return x.iid === iid; });
+  if(!it || !it.released) return;
+  it.feelingGood = !it.feelingGood;
+  savePracticeState();
+  renderGoalActions(currentExerciseId);
+}
+function delGoalAction(iid){
+  var st = getExState(currentExerciseId);
+  st.actions = (st.actions||[]).filter(function(x){ return x.iid !== iid; });
+  savePracticeState();
+  renderGoalActions(currentExerciseId);
+}
+
+/* release + gain integration (uses original release flow & journal) */
+function practiceGoRelease(){
+  switchPage('release');
+  setTimeout(function(){ initReleaseSteps(); }, 80);
+}
+var gainType = '';
+function openGainModal(){
+  document.getElementById('gainInput').value = '';
+  gainType = '';
+  renderGainTypes();
+  document.getElementById('gainModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function renderGainTypes(){
+  var h = '';
+  GAIN_TYPES.forEach(function(t){
+    h += '<button class="gain-chip' + (gainType===t?' on':'') + '" onclick="pickGain(\'' + t + '\')">' + t + '</button>';
+  });
+  document.getElementById('gainTypes').innerHTML = h;
+}
+function pickGain(t){ gainType = (gainType===t ? '' : t); renderGainTypes(); }
+function closeGainModal(){
+  document.getElementById('gainModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function saveGain(){
+  var t = document.getElementById('gainInput').value.trim();
+  if(!t){ showToast('写点什么再保存吧'); return; }
+  var ex = findExercise(currentExerciseId);
+  var note = gainType ? ('【' + gainType + '】' + t) : t;
+  journalEntries.unshift({ id:Date.now(), date:new Date().toISOString(), emotion:'练习收获 · ' + ex.title, category:gainType || '练习本', source:'练习本', answers:{}, note:note });
+  localStorage.setItem('releaseJournal', JSON.stringify(journalEntries));
+  closeGainModal();
+  showToast('收获已记入释放日志');
+}
+
+
+renderHierarchy();
+initReleaseSteps();
+renderPracticeList();
+</script>
+
+
+<div class="light"></div><div data-trae-edit-ui="true"></div></body></html>
